@@ -31,6 +31,10 @@
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <mybatis-plus-test.version>3.5.7</mybatis-plus-test.version>
         <spring-data-commons.version>3.4.3</spring-data-commons.version>
+        <mysql-connector.version>8.0.29</mysql-connector.version>
+        <springfox-swagger.version>3.0.0</springfox-swagger.version>
+        <mybatis-plus-generator-version>3.5.10.1</mybatis-plus-generator-version>
+        <freemarker-version>2.3.34</freemarker-version>
         <eventms-common-version>1.0-SNAPSHOT</eventms-common-version>
     </properties>
 
@@ -38,6 +42,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -59,6 +64,11 @@
                 <version>${spring-data-commons.version}</version>
             </dependency>
             <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
@@ -70,10 +80,19 @@
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>org.postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>42.7.4</version>
-                <scope>runtime</scope>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

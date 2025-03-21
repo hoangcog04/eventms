@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.eventms.mbp.mapper.EesTicketMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.EesTicket">
+        <id column="id" property="id" />
+        <result column="event_id" property="eventId" />
+        <result column="name" property="name" />
+        <result column="summary" property="summary" />
+        <result column="pic" property="pic" />
+        <result column="price" property="price" />
+        <result column="quantity" property="quantity" />
+        <result column="is_free" property="isFree" />
+        <result column="deleted" property="deleted" />
+    </resultMap>
+
+</mapper>

@@ -17,4 +17,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.example.eventms</groupId>
+            <artifactId>eventms-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example.eventms</groupId>
+            <artifactId>eventms-mbp</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

@@ -19,6 +19,10 @@ import java.util.function.Consumer;
 
 import static com.baomidou.mybatisplus.generator.config.rules.NamingStrategy.underline_to_camel;
 
+/**
+ * MyBatis Plus generator
+ * Created by vicendy04 on 2025-03.
+ */
 public class MyBatisPlusGenerator {
     public static void main(String[] args) throws IOException {
         String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
@@ -61,8 +65,6 @@ public class MyBatisPlusGenerator {
     public static Consumer<PackageConfig.Builder> getPackageConfig(String parent, String modulePath) {
         return builder -> {
             builder.parent(parent);
-            builder.mapper("mapper");
-            builder.xml("mapper");
             builder.pathInfo(Collections.singletonMap(OutputFile.xml, modulePath + "/src/main/resources/mapper/"));
         };
     }
@@ -79,6 +81,8 @@ public class MyBatisPlusGenerator {
             builder.mapperBuilder()
                     .mapperAnnotation(Mapper.class)
                     .enableBaseResultMap();
+            builder.serviceBuilder()
+                    .disable();
             builder.controllerBuilder()
                     .disable();
         };

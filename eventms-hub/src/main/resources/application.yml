@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: eventms-hub
+  profiles:
+    active: dev
+    

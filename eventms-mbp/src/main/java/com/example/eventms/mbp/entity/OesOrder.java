@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("oes_order")
+@Schema(name = "OesOrder", description = "")
 public class OesOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,54 +35,39 @@ public class OesOrder implements Serializable {
 
     private Long userId;
 
-    /**
-     * Order serial number
-     */
+    private Long eventId;
+
+    @Schema(description = "Order serial number")
     private String orderSn;
 
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private LocalDateTime created;
 
-    private String userUsername;
+    @Schema(description = "Order owner name")
+    private String ownerName;
 
-    /**
-     * Total order amount
-     */
+    @Schema(description = "Total order amount")
     private BigDecimal totalAmount;
 
-    /**
-     * Actual payment amount
-     */
+    @Schema(description = "Actual payment amount")
     private BigDecimal payAmount;
 
-    /**
-     * Coupon discount amount
-     */
+    @Schema(description = "Coupon discount amount")
     private BigDecimal couponAmount;
 
-    /**
-     * 0->Unpaid;1->...
-     */
+    @Schema(description = "0->Unpaid;1->...")
     private Integer payType;
 
-    /**
-     * 0:Pending;1:Completed;2:Canceled;3:Refunded
-     */
+    @Schema(description = "0:Pending;1:Completed;2:Canceled;3:Refunded")
     private Integer status;
 
-    /**
-     * 0:Email;1:Phone
-     */
+    @Schema(description = "0:Email;1:Phone")
     private Integer deliveryType;
 
-    /**
-     * Email for invoice (optional)
-     */
+    @Schema(description = "Email for invoice (optional)")
     private String billReceiverEmail;
 
-    /**
-     * Attendee name (required)
-     */
+    @Schema(description = "Attendee name (required)")
     private String receiverName;
 
     @TableLogic

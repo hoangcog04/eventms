@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("oes_order_refund")
+@Schema(name = "OesOrderRefund", description = "")
 public class OesOrderRefund implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,41 +41,30 @@ public class OesOrderRefund implements Serializable {
     private String orderSn;
 
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private LocalDateTime created;
 
-    private String userUsername;
-
-    /**
-     * Refund amount
-     */
-    private BigDecimal refundAmount;
-
+    @Schema(description = "Refund requester name")
     private String refundName;
+
+    @Schema(description = "Refund amount")
+    private BigDecimal refundAmount;
 
     private String refundEmail;
 
-    /**
-     * Status: 0->pending (default); 1->refunding; 2->completed; 3->rejected
-     */
+    @Schema(description = "Status: 0->pending (default); 1->refunding; 2->completed; 3->rejected")
     private Integer status;
 
     private String ticketPic;
 
     private String ticketName;
 
-    /**
-     * Refund quantity
-     */
-    private Integer ticketCount;
+    @Schema(description = "Refund quantity")
+    private Integer ticketQuantity;
 
-    /**
-     * Ticket price
-     */
+    @Schema(description = "Ticket price")
     private BigDecimal ticketPrice;
 
-    /**
-     * Actual payment price
-     */
+    @Schema(description = "Actual payment price")
     private BigDecimal ticketRealPrice;
 
     private String reason;

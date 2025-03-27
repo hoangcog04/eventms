@@ -8,9 +8,10 @@
         <result column="event_id" property="eventId" />
         <result column="session_name" property="sessionName" />
         <result column="summary" property="summary" />
-        <result column="date" property="date" />
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
+        <result column="created" property="created" />
+        <result column="changed" property="changed" />
     </resultMap>
 
 </mapper>

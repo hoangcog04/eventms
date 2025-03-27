@@ -12,7 +12,7 @@
         <result column="email" property="email" />
         <result column="event_count" property="eventCount" />
         <result column="website_url" property="websiteUrl" />
-        <result column="create_time" property="createTime" />
+        <result column="created" property="created" />
         <result column="avatar" property="avatar" />
         <result column="big_pic" property="bigPic" />
         <result column="status" property="status" />

@@ -11,11 +11,17 @@
         <result column="summary" property="summary" />
         <result column="pic" property="pic" />
         <result column="album_pics" property="albumPics" />
-        <result column="start_date" property="startDate" />
-        <result column="end_date" property="endDate" />
+        <result column="date" property="date" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="currency_code" property="currencyCode" />
         <result column="deleted" property="deleted" />
         <result column="status" property="status" />
+        <result column="capacity" property="capacity" />
         <result column="preview_status" property="previewStatus" />
+        <result column="created" property="created" />
+        <result column="changed" property="changed" />
+        <result column="publish_time" property="publishTime" />
     </resultMap>
 
 </mapper>

@@ -3,6 +3,7 @@ package com.example.eventms.mbp.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("oes_order_item")
+@Schema(name = "OesOrderItem", description = "")
 public class OesOrderItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,9 +31,7 @@ public class OesOrderItem implements Serializable {
 
     private Long orderId;
 
-    /**
-     * Order serial number
-     */
+    @Schema(description = "Order serial number")
     private String orderSn;
 
     private Long ticketId;
@@ -44,13 +44,9 @@ public class OesOrderItem implements Serializable {
 
     private BigDecimal ticketPrice;
 
-    /**
-     * Actual payment amount
-     */
+    @Schema(description = "Actual payment amount")
     private BigDecimal realAmount;
 
-    /**
-     * Coupon discount amount
-     */
+    @Schema(description = "Coupon discount amount")
     private BigDecimal couponAmount;
 }

@@ -13,16 +13,16 @@ import java.util.List;
 public class RestPage<T> {
     long pageNum;
     long pageSize;
-    long totalElements;
-    long totalPages;
+    long objectCount;
+    long pageCount;
     List<T> content;
 
     public static <T> RestPage<T> of(com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page) {
         RestPage<T> result = new RestPage<>();
         result.setPageNum(page.getCurrent());
         result.setPageSize(page.getSize());
-        result.setTotalElements(page.getTotal());
-        result.setTotalPages(page.getTotal() / page.getSize() + 1);
+        result.setObjectCount(page.getTotal());
+        result.setPageCount(page.getTotal() / page.getSize() + 1);
         result.setContent(page.getRecords());
         return result;
     }
@@ -31,8 +31,8 @@ public class RestPage<T> {
         RestPage<T> result = new RestPage<>();
         result.setPageNum(page.getNumber());
         result.setPageSize(page.getSize());
-        result.setTotalElements(page.getTotalElements());
-        result.setTotalPages(page.getTotalPages());
+        result.setObjectCount(page.getTotalElements());
+        result.setPageCount(page.getTotalPages());
         result.setContent(page.getContent());
         return result;
     }

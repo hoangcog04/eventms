@@ -3,6 +3,7 @@ package com.example.eventms.mbp.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("ees_attribute_value")
+@Schema(name = "EesAttributeValue", description = "")
 public class EesAttributeValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,8 +32,6 @@ public class EesAttributeValue implements Serializable {
 
     private Long attributeId;
 
-    /**
-     * Add the value of the attr. The attr has a single value. If there are multiple values, separate them with commas
-     */
+    @Schema(description = "The value of the attr's value list, separated by commas")
     private String value;
 }

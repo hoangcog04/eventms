@@ -9,15 +9,14 @@
         <result column="payment_company_id" property="paymentCompanyId" />
         <result column="ticket_id" property="ticketId" />
         <result column="order_sn" property="orderSn" />
-        <result column="create_time" property="createTime" />
-        <result column="user_username" property="userUsername" />
-        <result column="refund_amount" property="refundAmount" />
+        <result column="created" property="created" />
         <result column="refund_name" property="refundName" />
+        <result column="refund_amount" property="refundAmount" />
         <result column="refund_email" property="refundEmail" />
         <result column="status" property="status" />
         <result column="ticket_pic" property="ticketPic" />
         <result column="ticket_name" property="ticketName" />
-        <result column="ticket_count" property="ticketCount" />
+        <result column="ticket_quantity" property="ticketQuantity" />
         <result column="ticket_price" property="ticketPrice" />
         <result column="ticket_real_price" property="ticketRealPrice" />
         <result column="reason" property="reason" />

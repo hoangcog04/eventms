@@ -56,6 +56,8 @@ public class MyBatisPlusGenerator {
     public static Consumer<GlobalConfig.Builder> getGlobalConfig(String modulePath, String author) {
         return builder -> {
             builder.disableOpenDir();
+            //builder.enableSwagger();
+            builder.enableSpringdoc();
             builder.outputDir(modulePath + "/src/main/java");
             builder.author(author);
             builder.commentDate("yyyy-MM");
@@ -72,13 +74,17 @@ public class MyBatisPlusGenerator {
     public static Consumer<StrategyConfig.Builder> getStrategyConfig() {
         return builder -> {
             builder.entityBuilder()
+                    .enableFileOverride()
                     .enableLombok()
                     .naming(underline_to_camel)
                     .columnNaming(underline_to_camel)
+                    .fieldUseJavaDoc(false)
                     .idType(IdType.AUTO)
                     .logicDeleteColumnName("deleted")
-                    .addTableFills(new Column("create_time", FieldFill.INSERT));
+                    .addTableFills(new Column("created", FieldFill.INSERT))
+                    .addTableFills(new Column("changed", FieldFill.INSERT_UPDATE));
             builder.mapperBuilder()
+                    .enableFileOverride()
                     .mapperAnnotation(Mapper.class)
                     .enableBaseResultMap();
             builder.serviceBuilder()

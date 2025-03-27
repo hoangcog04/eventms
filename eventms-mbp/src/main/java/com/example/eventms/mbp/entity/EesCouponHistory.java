@@ -22,36 +22,29 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("ues_organizer")
-@Schema(name = "UesOrganizer", description = "")
-public class UesOrganizer implements Serializable {
+@TableName("ees_coupon_history")
+@Schema(name = "EesCouponHistory", description = "")
+public class EesCouponHistory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private String username;
+    private Long couponId;
 
-    private String password;
+    private String couponCode;
 
-    private String name;
+    private Long userId;
 
-    private String summary;
+    @Schema(description = "Redeemer name ")
+    private String redeemerName;
 
-    private String email;
-
-    private Integer eventCount;
-
-    private String websiteUrl;
-
+    @Schema(description = "Use time")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;
 
-    private String avatar;
+    private Long orderId;
 
-    private String bigPic;
-
-    @Schema(description = "0:Disabled; 1:Enabled")
-    private Integer status;
+    private String orderSn;
 }

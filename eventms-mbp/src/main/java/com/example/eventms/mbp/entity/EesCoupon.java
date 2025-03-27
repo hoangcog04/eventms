@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,25 +20,31 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("ees_attribute")
-@Schema(name = "EesAttribute", description = "")
-public class EesAttribute implements Serializable {
+@TableName("ees_coupon")
+@Schema(name = "EesCoupon", description = "")
+public class EesCoupon implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long attributeCategoryId;
-
     private String name;
 
-    @Schema(description = "Selection type: 0->no selection; 1->single; 2->multiple")
-    private Integer selectType;
+    @Schema(description = "Quantity")
+    private Integer count;
 
-    @Schema(description = "Entry method: 0->no entry; 1->manual; 2->select from list")
-    private Integer inputType;
+    @Schema(description = "Number of times this Discount can be used")
+    private Integer quantityAvailable;
 
-    @Schema(description = "Value list, separated by commas")
-    private String inputList;
+    private Integer percentOff;
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
+
+    private String code;
+
+    @Schema(description = "Event ID for applicable discount. Leave empty for all events")
+    private String couponEventId;
 }

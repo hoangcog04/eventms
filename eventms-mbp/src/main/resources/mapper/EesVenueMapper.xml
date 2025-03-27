@@ -5,10 +5,11 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.EesVenue">
         <id column="id" property="id" />
-        <result column="address_name" property="addressName" />
+        <result column="name" property="name" />
         <result column="city" property="city" />
         <result column="country" property="country" />
         <result column="detail_address" property="detailAddress" />
+        <result column="google_place_id" property="googlePlaceId" />
         <result column="latitude" property="latitude" />
         <result column="longitude" property="longitude" />
     </resultMap>

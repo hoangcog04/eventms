@@ -9,7 +9,7 @@
         <result column="password" property="password" />
         <result column="name" property="name" />
         <result column="email" property="email" />
-        <result column="create_time" property="createTime" />
+        <result column="created" property="created" />
         <result column="avatar" property="avatar" />
         <result column="birthday" property="birthday" />
         <result column="status" property="status" />

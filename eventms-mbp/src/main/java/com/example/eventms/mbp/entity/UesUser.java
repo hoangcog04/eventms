@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("ues_user")
+@Schema(name = "UesUser", description = "")
 public class UesUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,14 +41,12 @@ public class UesUser implements Serializable {
     private String email;
 
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private LocalDateTime created;
 
     private String avatar;
 
     private LocalDate birthday;
 
-    /**
-     * 0:Disabled; 1:Enabled
-     */
+    @Schema(description = "0:Disabled; 1:Enabled")
     private Integer status;
 }

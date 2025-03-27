@@ -19,25 +19,20 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("ees_attribute")
-@Schema(name = "EesAttribute", description = "")
-public class EesAttribute implements Serializable {
+@TableName("ees_faqs")
+@Schema(name = "EesFaqs", description = "")
+public class EesFaqs implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long attributeCategoryId;
+    private Long eventId;
 
-    private String name;
+    private String question;
 
-    @Schema(description = "Selection type: 0->no selection; 1->single; 2->multiple")
-    private Integer selectType;
+    private String answer;
 
-    @Schema(description = "Entry method: 0->no entry; 1->manual; 2->select from list")
-    private Integer inputType;
-
-    @Schema(description = "Value list, separated by commas")
-    private String inputList;
+    private Integer sorting;
 }

@@ -1,8 +1,11 @@
 package com.example.eventms.mbp.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,6 +24,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @TableName("ees_agenda")
+@Schema(name = "EesAgenda", description = "")
 public class EesAgenda implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,9 +38,13 @@ public class EesAgenda implements Serializable {
 
     private String summary;
 
-    private LocalDateTime date;
-
     private LocalTime startTime;
 
     private LocalTime endTime;
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime created;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime changed;
 }

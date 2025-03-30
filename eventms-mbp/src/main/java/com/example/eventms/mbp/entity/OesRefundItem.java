@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,30 +23,40 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("ues_user")
-@Schema(name = "UesUser", description = "")
-public class UesUser implements Serializable {
+@TableName("oes_refund_item")
+@Schema(name = "OesRefundItem", description = "")
+public class OesRefundItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private String username;
+    private Long orderId;
 
-    private String password;
+    private String orderSn;
 
-    private String name;
-
-    private String email;
+    private Long ticketId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;
 
-    private String avatar;
+    private String ticketName;
 
-    private LocalDate birthday;
+    private BigDecimal orderTicketPrice;
 
-    @Schema(description = "0->Disabled; 1->Enabled")
-    private Integer status;
+    @Schema(description = "Order ticket quantity")
+    private Integer orderTicketQuantity;
+
+    @Schema(description = "Actual payment amount")
+    private BigDecimal realAmount;
+
+    @Schema(description = "Coupon discount amount")
+    private BigDecimal couponAmount;
+
+    @Schema(description = "Quantity refunded")
+    private Integer quantityProcessed;
+
+    @Schema(description = "The amount of money refunded")
+    private BigDecimal amountProcessed;
 }

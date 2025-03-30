@@ -37,7 +37,7 @@ public class EesCouponHistory implements Serializable {
 
     private Long userId;
 
-    @Schema(description = "Redeemer name ")
+    @Schema(description = "Redeemer name")
     private String redeemerName;
 
     @Schema(description = "Use time")

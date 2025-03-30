@@ -14,7 +14,6 @@
         <result column="date" property="date" />
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
-        <result column="currency_code" property="currencyCode" />
         <result column="deleted" property="deleted" />
         <result column="status" property="status" />
         <result column="capacity" property="capacity" />

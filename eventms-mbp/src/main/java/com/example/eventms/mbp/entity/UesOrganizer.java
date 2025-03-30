@@ -52,6 +52,6 @@ public class UesOrganizer implements Serializable {
 
     private String bigPic;
 
-    @Schema(description = "0:Disabled; 1:Enabled")
+    @Schema(description = "0->Disabled; 1->Enabled")
     private Integer status;
 }

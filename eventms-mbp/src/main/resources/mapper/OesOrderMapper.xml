@@ -13,9 +13,9 @@
         <result column="total_amount" property="totalAmount" />
         <result column="pay_amount" property="payAmount" />
         <result column="coupon_amount" property="couponAmount" />
-        <result column="pay_type" property="payType" />
+        <result column="checkout_method" property="checkoutMethod" />
         <result column="status" property="status" />
-        <result column="delivery_type" property="deliveryType" />
+        <result column="delivery_method" property="deliveryMethod" />
         <result column="bill_receiver_email" property="billReceiverEmail" />
         <result column="receiver_name" property="receiverName" />
         <result column="deleted" property="deleted" />

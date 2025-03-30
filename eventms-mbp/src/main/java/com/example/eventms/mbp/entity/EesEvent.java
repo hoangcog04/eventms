@@ -51,8 +51,6 @@ public class EesEvent implements Serializable {
 
     private LocalTime endTime;
 
-    private String currencyCode;
-
     @TableLogic
     private Integer deleted;
 

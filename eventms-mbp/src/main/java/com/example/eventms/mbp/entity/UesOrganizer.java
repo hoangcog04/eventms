@@ -31,9 +31,7 @@ public class UesOrganizer implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private String username;
-
-    private String password;
+    private Long userId;
 
     private String name;
 
@@ -47,6 +45,9 @@ public class UesOrganizer implements Serializable {
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime changed;
 
     private String avatar;
 

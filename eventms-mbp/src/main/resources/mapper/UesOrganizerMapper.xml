@@ -5,14 +5,14 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.UesOrganizer">
         <id column="id" property="id" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
+        <result column="user_id" property="userId" />
         <result column="name" property="name" />
         <result column="summary" property="summary" />
         <result column="email" property="email" />
         <result column="event_count" property="eventCount" />
         <result column="website_url" property="websiteUrl" />
         <result column="created" property="created" />
+        <result column="changed" property="changed" />
         <result column="avatar" property="avatar" />
         <result column="big_pic" property="bigPic" />
         <result column="status" property="status" />

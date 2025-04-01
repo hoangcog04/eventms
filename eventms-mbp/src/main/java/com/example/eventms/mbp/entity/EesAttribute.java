@@ -30,6 +30,8 @@ public class EesAttribute implements Serializable {
 
     private Long attributeCategoryId;
 
+    private String attributeCategoryName;
+
     private String name;
 
     @Schema(description = "Selection type: 0->no selection; 1->single; 2->multiple")

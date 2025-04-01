@@ -11,7 +11,7 @@ public enum ResultCode {
     FAILED(500, "Operation failed"),
     VALIDATE_FAILED(400, "Parameter verification failed"),
     UNAUTHORIZED(401, "Not logged in or token has expired"),
-    FORBIDDEN(403, "No relevant permissions"),
+    FORBIDDEN(403, "You do not have permission to access the resource you requested"),
     NOTFOUND(404, "Not found");
     long code;
     String message;

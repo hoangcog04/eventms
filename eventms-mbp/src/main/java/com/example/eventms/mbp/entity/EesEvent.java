@@ -19,7 +19,7 @@ import lombok.ToString;
  * </p>
  *
  * @author vicendy04
- * @since 2025-03
+ * @since 2025-04
  */
 @Getter
 @Setter
@@ -60,7 +60,7 @@ public class EesEvent implements Serializable {
     @Schema(description = "Set event capacity to prevent overselling")
     private Integer capacity;
 
-    private Integer previewStatus;
+    private Integer isFree;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;

@@ -15,11 +15,11 @@ import lombok.Setter;
 import lombok.ToString;
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author vicendy04
- * @since 2025-03
+ * @since 2025-04
  */
 @Getter
 @Setter
@@ -52,6 +52,7 @@ public class EesTicket implements Serializable {
     @Schema(description = "Total capacity of this ticket")
     private Integer capacity;
 
+    @Schema(description = "Maximum number per order (blank uses default value 10)")
     private Integer maxQuantityPerOrder;
 
     private Integer sorting;

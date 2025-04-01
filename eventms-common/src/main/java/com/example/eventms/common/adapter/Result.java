@@ -57,6 +57,10 @@ public class Result<T> {
         return new Result<T>(ResultCode.VALIDATE_FAILED.getCode(), message, null);
     }
 
+    public static <T> Result<T> notFound() {
+        return new Result<T>(ResultCode.NOTFOUND.getCode(), ResultCode.NOTFOUND.getMessage(), null);
+    }
+
     public static <T> Result<T> unauthorized(T data) {
         return new Result<T>(ResultCode.UNAUTHORIZED.getCode(), ResultCode.UNAUTHORIZED.getMessage(), data);
     }

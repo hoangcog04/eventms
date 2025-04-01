@@ -17,7 +17,7 @@
         <result column="deleted" property="deleted" />
         <result column="status" property="status" />
         <result column="capacity" property="capacity" />
-        <result column="preview_status" property="previewStatus" />
+        <result column="is_free" property="isFree" />
         <result column="created" property="created" />
         <result column="changed" property="changed" />
         <result column="publish_time" property="publishTime" />

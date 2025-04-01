@@ -15,7 +15,7 @@ import lombok.ToString;
  * </p>
  *
  * @author vicendy04
- * @since 2025-03
+ * @since 2025-04
  */
 @Getter
 @Setter
@@ -28,6 +28,8 @@ public class EesVenue implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
+    private Long organizerId;
 
     private String name;
 

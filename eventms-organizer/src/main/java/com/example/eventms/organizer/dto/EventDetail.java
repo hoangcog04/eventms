@@ -33,9 +33,12 @@ public class EventDetail implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private OrganizerDto organizer;
 
-    private List<AttributeDto> attributeList;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<CheckoutSettingDto> checkoutSettings;
 
-    private List<AttributeValueDto> attributeValueList;
+    private List<AttributeDto> attributes;
+
+    private List<AttributeValueDto> attributeValues;
 
     @Getter
     @Setter
@@ -96,6 +99,29 @@ public class EventDetail implements Serializable {
         private BigDecimal latitude;
 
         private BigDecimal longitude;
+    }
+
+    @Getter
+    @Setter
+    public static class CheckoutSettingDto implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private Long id;
+
+        private String countryCode;
+
+        private String currencyCode;
+
+        @Schema(description = "0->Default; 1->Offline; 2->Payments system")
+        private Integer checkoutMethod;
+
+        @Schema(description = "Left empty if checkout method is not offline")
+        private String offlineNote;
+
+        private LocalDateTime created;
+
+        private LocalDateTime changed;
     }
 
     @Getter

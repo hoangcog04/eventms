@@ -26,26 +26,26 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Service
 public class EesVenueServiceImpl extends ServiceImpl<EesVenueMapper, EesVenue> implements IEesVenueService {
-    EesVenueMapper eesVenueMapper;
+    EesVenueMapper venueMapper;
     VenueConverter venueConverter;
 
     @Override
     public EesVenue add(VenuePayload venuePayload) {
         EesVenue eesVenue = venueConverter.toEntity(venuePayload);
-        eesVenueMapper.insert(eesVenue);
+        venueMapper.insert(eesVenue);
         return eesVenue;
     }
 
     @Override
     public EesVenue getItem(Long id) {
-        return eesVenueMapper.selectById(id);
+        return venueMapper.selectById(id);
     }
 
     @Override
     public Page<EesVenue> getList(Integer pageNum, Integer pageSize) {
-        LambdaQueryWrapper<EesVenue> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(EesVenue::getOrganizerId, 4);
+        var wrp = new LambdaQueryWrapper<EesVenue>();
+        wrp.eq(EesVenue::getOrganizerId, 4);
         Page<EesVenue> page = new Page<>(pageNum, pageSize);
-        return page(page, wrapper);
+        return page(page, wrp);
     }
 }

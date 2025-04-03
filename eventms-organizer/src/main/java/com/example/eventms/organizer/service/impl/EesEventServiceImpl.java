@@ -2,11 +2,11 @@ package com.example.eventms.organizer.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.eventms.common.constant.BusinessConstants;
 import com.example.eventms.mbp.entity.*;
 import com.example.eventms.mbp.mapper.*;
 import com.example.eventms.organizer.dto.EventDetail;
 import com.example.eventms.organizer.dto.EventPayload;
+import com.example.eventms.organizer.dto.EventPublish;
 import com.example.eventms.organizer.dto.EventResult;
 import com.example.eventms.organizer.mapper.EventConverter;
 import com.example.eventms.organizer.service.IEesEventService;
@@ -17,7 +17,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.example.eventms.common.constant.ParamConstants.*;
+import static com.example.eventms.organizer.constant.BusinessConstants.FIRST_TICKET_NAME;
+import static com.example.eventms.organizer.constant.BusinessConstants.FIRST_TICKET_SORTING;
+import static com.example.eventms.organizer.constant.ValidateErrConstants.*;
+import static com.example.eventms.organizer.utils.ValidationUtils.*;
 
 /**
  * <p>
@@ -31,12 +38,13 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Service
 public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> implements IEesEventService {
-    EesEventMapper eesEventMapper;
-    EesVenueMapper eesVenueMapper;
-    EesTicketMapper eesTicketMapper;
-    EesAttributeMapper eesAttributeMapper;
-    UesOrganizerMapper uesOrganizerMapper;
-    EesAttributeValueMapper eesAttributeValueMapper;
+    EesEventMapper eventMapper;
+    EesVenueMapper venueMapper;
+    EesTicketMapper ticketMapper;
+    EesAttributeMapper attributeMapper;
+    UesOrganizerMapper organizerMapper;
+    EesAttributeValueMapper attributeValueMapper;
+    EesCheckoutSettingMapper checkoutSettingMapper;
     EventConverter eventConverter;
 
     @Override
@@ -49,17 +57,17 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
             eesEvent.setIsFree(1);
             eesTicket.setIsFree(1);
         }
-        eesEventMapper.insert(eesEvent);
+        eventMapper.insert(eesEvent);
 
         eesTicket.setEventId(eesEvent.getId());
-        eesTicket.setName(BusinessConstants.FIRST_TICKET_NAME);
+        eesTicket.setName(FIRST_TICKET_NAME);
         eesTicket.setQuantityTotal(eesEvent.getCapacity());
         eesTicket.setCapacity(eesEvent.getCapacity());
-        eesTicket.setSorting(BusinessConstants.FIRST_TICKET_SORTING);
-        eesTicketMapper.insert(eesTicket);
+        eesTicket.setSorting(FIRST_TICKET_SORTING);
+        ticketMapper.insert(eesTicket);
 
-        eesEvent = eesEventMapper.selectById(eesEvent.getId());
-        eesTicket = eesTicketMapper.selectById(eesTicket.getId());
+        eesEvent = eventMapper.selectById(eesEvent.getId());
+        eesTicket = ticketMapper.selectById(eesTicket.getId());
 
         EventResult.EventDto eventDto = eventConverter.toEventResultDto(eesEvent);
         EventResult.TicketDto ticketDto = eventConverter.toTicketResultDto(eesTicket);
@@ -74,38 +82,72 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
     public EventDetail detail(Long eventId, List<String> paramList) {
         EventDetail eventDetail = new EventDetail();
 
-        EesEvent eesEvent = eesEventMapper.selectById(eventId);
+        EesEvent eesEvent = eventMapper.selectById(eventId);
         EventDetail.EventDto eventDto = eventConverter.toEventDetailDto(eesEvent);
         eventDetail.setEvent(eventDto);
 
-        var attrValueWrapper = new LambdaQueryWrapper<EesAttributeValue>();
-        attrValueWrapper.eq(EesAttributeValue::getEventId, eventId);
-        List<EesAttributeValue> attrValues = eesAttributeValueMapper.selectList(attrValueWrapper);
+        var attrValueWrp = new LambdaQueryWrapper<EesAttributeValue>();
+        attrValueWrp.eq(EesAttributeValue::getEventId, eventId);
+        List<EesAttributeValue> attrValues = attributeValueMapper.selectList(attrValueWrp);
         List<EventDetail.AttributeValueDto> attrValueDetailDtos = eventConverter.toAttrValueDetailDtos(attrValues);
-        eventDetail.setAttributeValueList(attrValueDetailDtos);
+        eventDetail.setAttributeValues(attrValueDetailDtos);
 
         if (!CollectionUtils.isEmpty(attrValues)) {
             List<Long> attributeIds = attrValues.stream().map(EesAttributeValue::getAttributeId).toList();
 
-            var attrWrapper = new LambdaQueryWrapper<EesAttribute>();
-            attrWrapper.in(EesAttribute::getId, attributeIds);
-            List<EesAttribute> eesAttributes = eesAttributeMapper.selectList(attrWrapper);
+            var attrWrp = new LambdaQueryWrapper<EesAttribute>();
+            attrWrp.in(EesAttribute::getId, attributeIds);
+            List<EesAttribute> eesAttributes = attributeMapper.selectList(attrWrp);
             List<EventDetail.AttributeDto> attrDetailDtos = eventConverter.toAttrDetailDtos(eesAttributes);
-            eventDetail.setAttributeList(attrDetailDtos);
+            eventDetail.setAttributes(attrDetailDtos);
         }
 
-        if (paramList.contains(BusinessConstants.VENUE_EXPANSION_PARAM)) {
-            EesVenue eesVenue = eesVenueMapper.selectById(eesEvent.getVenueId());
+        if (paramList.contains(VENUE_EXPANSION)) {
+            EesVenue eesVenue = venueMapper.selectById(eesEvent.getVenueId());
             EventDetail.VenueDto venueDto = eventConverter.toVenueDetailDto(eesVenue);
             eventDetail.setVenue(venueDto);
         }
 
-        if (paramList.contains(BusinessConstants.ORGANIZER_EXPANSION_PARAM)) {
-            UesOrganizer uesOrganizer = uesOrganizerMapper.selectById(eesEvent.getOrganizerId());
+        if (paramList.contains(ORGANIZER_EXPANSION)) {
+            UesOrganizer uesOrganizer = organizerMapper.selectById(eesEvent.getOrganizerId());
             EventDetail.OrganizerDto organizerDto = eventConverter.toOrganizerDetailDto(uesOrganizer);
             eventDetail.setOrganizer(organizerDto);
         }
 
+        if (paramList.contains(CHECKOUT_SETTING_EXPANSION)) {
+            var checkoutSettingWrp = new LambdaQueryWrapper<EesCheckoutSetting>();
+            checkoutSettingWrp.eq(EesCheckoutSetting::getEventId, eventId);
+            List<EesCheckoutSetting> eesCheckoutSettings = checkoutSettingMapper.selectList(checkoutSettingWrp);
+            List<EventDetail.CheckoutSettingDto> checkoutSettingDtos = eventConverter.toCheckoutSettingDtos(eesCheckoutSettings);
+            eventDetail.setCheckoutSettings(checkoutSettingDtos);
+        }
+
         return eventDetail;
+    }
+
+    @Override
+    public EventPublish publish(Long eventId) {
+        EventPublish eventPublish = new EventPublish();
+
+        EesEvent eesEvent = eventMapper.selectById(eventId);
+        if (isEventInvalid(eesEvent)) eventPublish.setErrorMessage(EVENT_FAIL_MSG);
+
+        UesOrganizer uesOrganizer = organizerMapper.selectById(eesEvent.getOrganizerId());
+        if (isOrganizerInValid(uesOrganizer)) eventPublish.setErrorMessage(ORGANIZER_FAIL_MSG);
+
+        var ticketWrp = new LambdaQueryWrapper<EesTicket>();
+        ticketWrp.eq(EesTicket::getEventId, eventId);
+        List<EesTicket> eesTickets = ticketMapper.selectList(ticketWrp);
+        if (isTicketsInvalid(eesTickets)) eventPublish.setErrorMessage(TICKET_FAIL_MSG);
+
+        eesEvent.setPublishTime(LocalDateTime.now());
+        eventMapper.updateById(eesEvent);
+
+        return eventPublish;
+    }
+
+    @Override
+    public EventPublish unpublish(Long eventId) {
+        return null;
     }
 }

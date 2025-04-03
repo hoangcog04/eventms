@@ -1,8 +1,9 @@
 package com.example.eventms.organizer.controller;
 
-import com.example.eventms.common.adapter.Result;
+import com.example.eventms.common.adapter.CommonResult;
 import com.example.eventms.organizer.dto.EventDetail;
 import com.example.eventms.organizer.dto.EventPayload;
+import com.example.eventms.organizer.dto.EventPublish;
 import com.example.eventms.organizer.dto.EventResult;
 import com.example.eventms.organizer.service.IEesEventService;
 import com.example.eventms.organizer.utils.ParamUtils;
@@ -28,20 +29,33 @@ import java.util.List;
 @Tag(name = "EesEventController", description = "Event Management")
 @RequestMapping("/organizations/events")
 public class EesEventController {
-    IEesEventService eesEventService;
+    IEesEventService eventService;
 
     @RequestMapping(value = "/auto-create", method = RequestMethod.POST)
-    public Result<EventResult> autoCreate(@RequestBody EventPayload eventPayload) {
-        EventResult eventResult = eesEventService.autoCreate(eventPayload);
-        return Result.success(eventResult);
+    public CommonResult<EventResult> autoCreate(@RequestBody EventPayload eventPayload) {
+        EventResult eventResult = eventService.autoCreate(eventPayload);
+        return CommonResult.success(eventResult);
     }
 
     @RequestMapping(value = "/{eventId}", method = RequestMethod.GET)
-    public Result<EventDetail> detail(@RequestParam(value = "expand", required = false) String expand,
-                                      @PathVariable Long eventId) {
+    public CommonResult<EventDetail> detail(@RequestParam(value = "expand", required = false) String expand,
+                                            @PathVariable Long eventId) {
         List<String> paramList = ParamUtils.parse(expand);
-        EventDetail eventDetail = eesEventService.detail(eventId, paramList);
-        return Result.success(eventDetail);
+        EventDetail eventDetail = eventService.detail(eventId, paramList);
+        return CommonResult.success(eventDetail);
     }
 
+    @RequestMapping(value = "/{eventId}/publish", method = RequestMethod.POST)
+    public CommonResult<EventPublish> publish(@PathVariable Long eventId) {
+        EventPublish published = eventService.publish(eventId);
+        if (published.getErrorMessage() == null) return CommonResult.success(published);
+        else return CommonResult.validateFailed(published);
+    }
+
+    @RequestMapping(value = "/{eventId}/unpublish", method = RequestMethod.POST)
+    public CommonResult<EventPublish> unpublish(@PathVariable Long eventId) {
+        EventPublish unpublished = eventService.unpublish(eventId);
+        if (unpublished.getErrorMessage() == null) return CommonResult.success(unpublished);
+        else return CommonResult.validateFailed(unpublished);
+    }
 }

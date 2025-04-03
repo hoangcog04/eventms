@@ -28,6 +28,10 @@ public interface EventConverter {
 
     EventDetail.OrganizerDto toOrganizerDetailDto(UesOrganizer entity);
 
+    EventDetail.CheckoutSettingDto toCheckoutSettingDto(EesCheckoutSetting entity);
+
+    List<EventDetail.CheckoutSettingDto> toCheckoutSettingDtos(List<EesCheckoutSetting> entity);
+
     EventDetail.AttributeDto toAttrDetailDto(EesAttribute entity);
 
     EventDetail.AttributeValueDto toAttrValueDetailDto(EesAttributeValue entity);

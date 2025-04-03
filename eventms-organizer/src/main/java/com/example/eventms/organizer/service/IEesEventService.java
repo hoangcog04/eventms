@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.eventms.mbp.entity.EesEvent;
 import com.example.eventms.organizer.dto.EventDetail;
 import com.example.eventms.organizer.dto.EventPayload;
+import com.example.eventms.organizer.dto.EventPublish;
 import com.example.eventms.organizer.dto.EventResult;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,4 +24,10 @@ public interface IEesEventService extends IService<EesEvent> {
     EventResult autoCreate(EventPayload eventPayload);
 
     EventDetail detail(Long eventId, List<String> paramList);
+
+    @Transactional
+    EventPublish publish(Long eventId);
+
+    @Transactional
+    EventPublish unpublish(Long eventId);
 }

@@ -33,6 +33,7 @@
         <mybatis-plus-test.version>3.5.7</mybatis-plus-test.version>
         <spring-data-commons.version>3.4.3</spring-data-commons.version>
         <mysql-connector.version>8.0.29</mysql-connector.version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
         <springdoc-openapi.version>2.8.5</springdoc-openapi.version>
         <mybatis-plus-generator.version>3.5.10.1</mybatis-plus-generator.version>
         <freemarker.version>2.3.34</freemarker.version>
@@ -55,6 +56,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

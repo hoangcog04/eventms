@@ -30,7 +30,7 @@ public interface EventConverter {
 
     EventDetail.CheckoutSettingDto toCheckoutSettingDto(EesCheckoutSetting entity);
 
-    List<EventDetail.CheckoutSettingDto> toCheckoutSettingDtos(List<EesCheckoutSetting> entity);
+    List<EventDetail.CheckoutSettingDto> toCheckoutSettingDtos(List<EesCheckoutSetting> entities);
 
     EventDetail.AttributeDto toAttrDetailDto(EesAttribute entity);
 

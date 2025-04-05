@@ -38,6 +38,8 @@ public class EesAgenda implements Serializable {
 
     private String summary;
 
+    private String hostName;
+
     private LocalTime startTime;
 
     private LocalTime endTime;

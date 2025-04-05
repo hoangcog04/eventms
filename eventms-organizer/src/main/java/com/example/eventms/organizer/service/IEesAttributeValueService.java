@@ -2,6 +2,9 @@ package com.example.eventms.organizer.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.eventms.mbp.entity.EesAttributeValue;
+import com.example.eventms.organizer.dto.EventProperty;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.example.eventms.mbp.entity.EesAttributeValue;
  */
 public interface IEesAttributeValueService extends IService<EesAttributeValue> {
 
+    List<EventProperty> getEventProperties(Long eventId);
 }

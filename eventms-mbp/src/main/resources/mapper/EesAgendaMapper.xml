@@ -8,6 +8,7 @@
         <result column="event_id" property="eventId" />
         <result column="session_name" property="sessionName" />
         <result column="summary" property="summary" />
+        <result column="host_name" property="hostName" />
         <result column="start_time" property="startTime" />
         <result column="end_time" property="endTime" />
         <result column="created" property="created" />

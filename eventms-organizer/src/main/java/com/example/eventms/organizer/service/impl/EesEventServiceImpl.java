@@ -52,6 +52,7 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
         EesEvent eesEvent = eventConverter.toEntity(eventPayload.getEvent());
         EesTicket eesTicket = eventConverter.toEntity(eventPayload.getTicket());
 
+        // Todo: edit organizerId
         eesEvent.setOrganizerId(4L);
         if (eesTicket.getPrice().compareTo(BigDecimal.ZERO) == 0) {
             eesEvent.setIsFree(1);

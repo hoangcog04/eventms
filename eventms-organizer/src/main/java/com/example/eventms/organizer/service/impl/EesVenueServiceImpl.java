@@ -31,6 +31,7 @@ public class EesVenueServiceImpl extends ServiceImpl<EesVenueMapper, EesVenue> i
 
     @Override
     public EesVenue add(VenuePayload venuePayload) {
+        // Todo: add organizerId
         EesVenue eesVenue = venueConverter.toEntity(venuePayload);
         venueMapper.insert(eesVenue);
         return eesVenue;

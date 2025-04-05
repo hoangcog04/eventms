@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.EesAttributeValue">
         <id column="id" property="id" />
         <result column="event_id" property="eventId" />
+        <result column="attribute_category_id" property="attributeCategoryId" />
         <result column="attribute_id" property="attributeId" />
         <result column="value" property="value" />
     </resultMap>

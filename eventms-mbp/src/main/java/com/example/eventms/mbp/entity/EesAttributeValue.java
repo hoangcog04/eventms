@@ -30,6 +30,8 @@ public class EesAttributeValue implements Serializable {
 
     private Long eventId;
 
+    private Long attributeCategoryId;
+
     private Long attributeId;
 
     @Schema(description = "The value of the attr's value list, separated by commas")

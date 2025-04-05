@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 /**
  * <p>
@@ -19,45 +16,36 @@ import java.time.LocalTime;
  */
 @Getter
 @Setter
-public class EventPayload implements Serializable {
+public class EventAttrPayload implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private EventDto event;
+    private AttrType type;
 
-    private TicketDto ticket;
+    private Data data;
 
     @Getter
     @Setter
-    public static class EventDto implements Serializable {
+    public static class AttrType implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        private Long venueId;
+        private Long attributeCategoryId;
 
-        private String title;
-
-        private String summary;
-
-        private LocalDateTime date;
-
-        private LocalTime startTime;
-
-        private LocalTime endTime;
-
-        @Schema(description = "Set event capacity to prevent overselling")
-        private Integer capacity;
+        private String attributeCategoryName;
     }
 
     @Getter
     @Setter
-    public static class TicketDto implements Serializable {
+    public static class Data implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        private BigDecimal price;
+        private Long attributeId;
 
-        @Schema(description = "Maximum number per order (blank uses default value 10)")
-        private Integer maxQuantityPerOrder;
+        private String attributeName;
+
+        @Schema(description = "The value of the attr's value list, separated by commas")
+        private String value;
     }
 }

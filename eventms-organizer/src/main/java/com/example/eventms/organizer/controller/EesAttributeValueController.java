@@ -1,16 +1,14 @@
 package com.example.eventms.organizer.controller;
 
 import com.example.eventms.common.adapter.CommonResult;
+import com.example.eventms.organizer.dto.EventAttrPayload;
 import com.example.eventms.organizer.dto.EventProperty;
 import com.example.eventms.organizer.service.IEesAttributeValueService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +32,12 @@ public class EesAttributeValueController {
     public CommonResult<List<EventProperty>> getEventProperties(@PathVariable Long eventId) {
         List<EventProperty> eventProperty = attributeValueService.getEventProperties(eventId);
         return CommonResult.success(eventProperty);
+    }
+
+    @RequestMapping(value = "/events/{eventId}/properties", method = RequestMethod.POST)
+    public CommonResult<?> updateEventProps(@PathVariable Long eventId,
+                                            @RequestBody List<EventAttrPayload> properties) {
+        int count = attributeValueService.updateEventProps(eventId, properties);
+        return CommonResult.success(count);
     }
 }

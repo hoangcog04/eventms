@@ -36,6 +36,12 @@ public class EventDetail implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<CheckoutSettingDto> checkoutSettings;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<AgendaDto> agendas;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<FaqDto> faqs;
+
     private List<AttributeDto> attributes;
 
     private List<AttributeValueDto> attributeValues;
@@ -122,6 +128,40 @@ public class EventDetail implements Serializable {
         private LocalDateTime created;
 
         private LocalDateTime changed;
+    }
+
+    @Getter
+    @Setter
+    public static class AgendaDto implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private Long id;
+
+        private String sessionName;
+
+        private String summary;
+
+        private String hostName;
+
+        private LocalTime startTime;
+
+        private LocalTime endTime;
+    }
+
+    @Getter
+    @Setter
+    public static class FaqDto implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private Long id;
+
+        private String question;
+
+        private String answer;
+
+        private Integer sorting;
     }
 
     @Getter

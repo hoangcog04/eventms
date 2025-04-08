@@ -3,7 +3,6 @@ package com.example.eventms.organizer.mapper;
 import com.example.eventms.mbp.entity.*;
 import com.example.eventms.organizer.constant.PayloadConstants;
 import com.example.eventms.organizer.dto.EventContent.Module;
-import com.example.eventms.organizer.dto.EventContent.Widget;
 import com.example.eventms.organizer.dto.EventDetail;
 import com.example.eventms.organizer.dto.EventPayload;
 import com.example.eventms.organizer.dto.EventResult;
@@ -11,12 +10,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.mapstruct.Mapper;
 
 import java.time.LocalTime;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.eventms.organizer.dto.EventContent.ModuleType;
-import static com.example.eventms.organizer.dto.EventContent.WidgetType;
 
 /**
  * @author vicendy04
@@ -42,6 +38,14 @@ public interface EventConverter {
 
     List<EventDetail.CheckoutSettingDto> toCheckoutSettingDtos(List<EesCheckoutSetting> entities);
 
+    EventDetail.AgendaDto toAgendaDto(EesAgenda entity);
+
+    List<EventDetail.AgendaDto> toAgendaDtos(List<EesAgenda> entities);
+
+    EventDetail.FaqDto toFaqDto(EesFaq entity);
+
+    List<EventDetail.FaqDto> toFaqDtos(List<EesFaq> entities);
+
     EventDetail.AttributeDto toAttrDetailDto(EesAttribute entity);
 
     EventDetail.AttributeValueDto toAttrValueDetailDto(EesAttributeValue entity);
@@ -50,7 +54,7 @@ public interface EventConverter {
 
     List<EventDetail.AttributeValueDto> toAttrValueDetailDtos(List<EesAttributeValue> entities);
 
-    default EesEvent toEventFrom(Long eventId, List<Module> modules) {
+    default EesEvent toEventFrom(List<Module> modules) {
         EesEvent eesEvent = new EesEvent();
 
         for (Module m : modules) {
@@ -75,53 +79,36 @@ public interface EventConverter {
             }
         }
 
-        eesEvent.setId(eventId);
-
         return eesEvent;
     }
 
-    default SimpleImmutableEntry<List<EesAgenda>, List<EesFaq>> toWidgetsFrom(Long eventId, List<Widget> widgets) {
-        List<EesAgenda> eesAgendas = new ArrayList<>();
-        List<EesFaq> eesFaqs = new ArrayList<>();
+    default EesAgenda toAgenda(Long eventId, JsonNode slot) {
+        String sessionName = slot.path(EesAgenda.Fields.sessionName).asText();
+        String summary = slot.path(EesAgenda.Fields.summary).asText();
+        String hostName = slot.path(EesAgenda.Fields.hostName).asText();
+        LocalTime startTime = LocalTime.parse(slot.path(EesAgenda.Fields.startTime).asText());
+        LocalTime endTime = LocalTime.parse(slot.path(EesAgenda.Fields.endTime).asText());
 
-        for (Widget w : widgets) {
-            WidgetType wType = w.getType();
-            JsonNode wData = w.getData();
+        EesAgenda eesAgenda = new EesAgenda();
+        eesAgenda.setEventId(eventId);
+        eesAgenda.setSessionName(sessionName);
+        eesAgenda.setSummary(summary);
+        eesAgenda.setHostName(hostName);
+        eesAgenda.setStartTime(startTime);
+        eesAgenda.setEndTime(endTime);
 
-            if (wType == WidgetType.AGENDA) {
-                JsonNode slots = wData.path(PayloadConstants.slots); // list
-                // Todo: https://www.baeldung.com/java-jackson-jsonnode-collection#42-using-convertvalue
-                for (JsonNode slot : slots) {
-                    String sessionName = slot.path(EesAgenda.Fields.sessionName).asText();
-                    String summary = slot.path(EesAgenda.Fields.summary).asText();
-                    String hostName = slot.path(EesAgenda.Fields.hostName).asText();
-                    LocalTime startTime = LocalTime.parse(slot.path(EesAgenda.Fields.startTime).asText());
-                    LocalTime endTime = LocalTime.parse(slot.path(EesAgenda.Fields.endTime).asText());
+        return eesAgenda;
+    }
 
-                    EesAgenda eesAgenda = new EesAgenda();
-                    eesAgenda.setEventId(eventId);
-                    eesAgenda.setSessionName(sessionName);
-                    eesAgenda.setSummary(summary);
-                    eesAgenda.setHostName(hostName);
-                    eesAgenda.setStartTime(startTime);
-                    eesAgenda.setEndTime(endTime);
-                    eesAgendas.add(eesAgenda);
-                }
-            } else if (wType == WidgetType.FAQS) {
-                JsonNode faqs = wData.path(PayloadConstants.faqs); // list
-                for (JsonNode faq : faqs) {
-                    String question = faq.path(EesFaq.Fields.question).asText();
-                    String answer = faq.path(EesFaq.Fields.answer).asText();
+    default EesFaq toFaq(Long eventId, JsonNode faq) {
+        String question = faq.path(EesFaq.Fields.question).asText();
+        String answer = faq.path(EesFaq.Fields.answer).asText();
 
-                    EesFaq eesFaq = new EesFaq();
-                    eesFaq.setEventId(eventId);
-                    eesFaq.setQuestion(question);
-                    eesFaq.setAnswer(answer);
-                    eesFaqs.add(eesFaq);
-                }
-            }
-        }
+        EesFaq eesFaq = new EesFaq();
+        eesFaq.setEventId(eventId);
+        eesFaq.setQuestion(question);
+        eesFaq.setAnswer(answer);
 
-        return new SimpleImmutableEntry<>(eesAgendas, eesFaqs);
+        return eesFaq;
     }
 }

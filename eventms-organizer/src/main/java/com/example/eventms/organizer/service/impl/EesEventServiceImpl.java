@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.eventms.mbp.entity.*;
 import com.example.eventms.mbp.mapper.*;
+import com.example.eventms.organizer.constant.PayloadConstants;
 import com.example.eventms.organizer.dto.*;
 import com.example.eventms.organizer.dto.EventContent.Module;
 import com.example.eventms.organizer.dto.EventContent.Widget;
 import com.example.eventms.organizer.mapper.EventConverter;
 import com.example.eventms.organizer.service.IEesEventService;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,12 +19,14 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.eventms.common.constant.ParamConstants.*;
 import static com.example.eventms.organizer.constant.BusinessConstants.FIRST_TICKET_NAME;
 import static com.example.eventms.organizer.constant.BusinessConstants.FIRST_TICKET_SORTING;
 import static com.example.eventms.organizer.constant.ValidateErrConstants.*;
+import static com.example.eventms.organizer.dto.EventContent.WidgetType;
 import static com.example.eventms.organizer.utils.ValidationUtils.*;
 
 /**
@@ -124,6 +128,20 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
             eventDetail.setCheckoutSettings(checkoutSettingDtos);
         }
 
+        if (paramList.contains(PROPERTY_EXPANSION)) {
+            var agendaWrp = new LambdaQueryWrapper<EesAgenda>();
+            agendaWrp.eq(EesAgenda::getEventId, eventId);
+            List<EesAgenda> eesAgendas = agendaMapper.selectList(agendaWrp);
+            List<EventDetail.AgendaDto> agendaDtos = eventConverter.toAgendaDtos(eesAgendas);
+            eventDetail.setAgendas(agendaDtos);
+
+            var faqWrp = new LambdaQueryWrapper<EesFaq>();
+            faqWrp.eq(EesFaq::getEventId, eventId);
+            List<EesFaq> eesFaqs = faqMapper.selectList(faqWrp);
+            List<EventDetail.FaqDto> faqDtos = eventConverter.toFaqDtos(eesFaqs);
+            eventDetail.setFaqs(faqDtos);
+        }
+
         return eventDetail;
     }
 
@@ -158,13 +176,66 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
         List<Module> modules = eventContent.getModules();
         List<Widget> widgets = eventContent.getWidgets();
 
-        EesEvent eesEvent = eventConverter.toEventFrom(eventId, modules);
-        var pair = eventConverter.toWidgetsFrom(eventId, widgets);
-        List<EesAgenda> eesAgendas = pair.getKey();
-        List<EesFaq> eesFaqs = pair.getValue();
+        EesEvent eesEvent = eventConverter.toEventFrom(modules);
+        eesEvent.setId(eventId);
 
-        this.saveOrUpdate(eesEvent);
+        List<EesAgenda> eesAgendas = new ArrayList<>();
+        List<EesFaq> eesFaqs = new ArrayList<>();
+
+        for (Widget w : widgets) {
+            WidgetType wType = w.getType();
+            JsonNode wData = w.getData();
+
+            if (wType == WidgetType.AGENDA)
+                eesAgendas = mergeWithExistingAgenda(eventId, wData);
+            else if (wType == WidgetType.FAQS)
+                eesFaqs = mergeWithExistingFaq(eventId, wData);
+        }
+
+        eventMapper.updateById(eesEvent);
         agendaMapper.insertOrUpdate(eesAgendas);
         faqMapper.insertOrUpdate(eesFaqs);
+    }
+
+    private List<EesAgenda> mergeWithExistingAgenda(Long eventId, JsonNode wData) {
+        var agendaWrp = new LambdaQueryWrapper<EesAgenda>();
+        agendaWrp.select(EesAgenda::getId).eq(EesAgenda::getEventId, eventId);
+        List<Long> agendaIdsDb = agendaMapper.selectObjs(agendaWrp);
+
+        List<EesAgenda> eesAgendas = new ArrayList<>();
+
+        JsonNode slots = wData.path(PayloadConstants.slots); // list
+        for (JsonNode slot : slots) {
+            EesAgenda eesAgenda = eventConverter.toAgenda(eventId, slot);
+            Long id = slot.path(EesAgenda.Fields.id).asLong();
+
+            if (agendaIdsDb.contains(id)) // update
+                eesAgenda.setId(id);
+
+            eesAgendas.add(eesAgenda);
+        }
+
+        return eesAgendas;
+    }
+
+    private List<EesFaq> mergeWithExistingFaq(Long eventId, JsonNode wData) {
+        var faqWrp = new LambdaQueryWrapper<EesFaq>();
+        faqWrp.select(EesFaq::getId).eq(EesFaq::getEventId, eventId);
+        List<Long> faqIdsDb = faqMapper.selectObjs(faqWrp);
+
+        List<EesFaq> eesFaqs = new ArrayList<>();
+
+        JsonNode faqs = wData.path(PayloadConstants.faqs); // list
+        for (JsonNode faq : faqs) {
+            EesFaq eesFaq = eventConverter.toFaq(eventId, faq);
+            Long id = faq.path(EesFaq.Fields.id).asLong();
+
+            if (faqIdsDb.contains(id)) // update
+                eesFaq.setId(id);
+
+            eesFaqs.add(eesFaq);
+        }
+
+        return eesFaqs;
     }
 }

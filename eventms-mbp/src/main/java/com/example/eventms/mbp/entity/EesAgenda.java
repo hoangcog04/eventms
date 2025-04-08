@@ -1,20 +1,19 @@
 package com.example.eventms.mbp.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author vicendy04
@@ -23,6 +22,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@FieldNameConstants
 @TableName("ees_agenda")
 @Schema(name = "EesAgenda", description = "")
 public class EesAgenda implements Serializable {

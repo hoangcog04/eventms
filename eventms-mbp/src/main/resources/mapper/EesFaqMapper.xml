@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.eventms.mbp.mapper.EesFaqsMapper">
+<mapper namespace="com.example.eventms.mbp.mapper.EesFaqMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.EesFaqs">
+    <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.EesFaq">
         <id column="id" property="id" />
         <result column="event_id" property="eventId" />
         <result column="question" property="question" />

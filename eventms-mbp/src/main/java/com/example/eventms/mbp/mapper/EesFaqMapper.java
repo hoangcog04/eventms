@@ -1,6 +1,6 @@
 package com.example.eventms.mbp.mapper;
 
-import com.example.eventms.mbp.entity.EesFaqs;
+import com.example.eventms.mbp.entity.EesFaq;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2025-04
  */
 @Mapper
-public interface EesFaqsMapper extends BaseMapper<EesFaqs> {
+public interface EesFaqMapper extends BaseMapper<EesFaq> {
 
 }
 

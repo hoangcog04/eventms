@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.eventms.mbp.entity.*;
 import com.example.eventms.mbp.mapper.*;
-import com.example.eventms.organizer.dto.EventDetail;
-import com.example.eventms.organizer.dto.EventPayload;
-import com.example.eventms.organizer.dto.EventPublish;
-import com.example.eventms.organizer.dto.EventResult;
+import com.example.eventms.organizer.dto.*;
+import com.example.eventms.organizer.dto.EventContent.Module;
+import com.example.eventms.organizer.dto.EventContent.Widget;
 import com.example.eventms.organizer.mapper.EventConverter;
 import com.example.eventms.organizer.service.IEesEventService;
 import lombok.AccessLevel;
@@ -38,8 +37,10 @@ import static com.example.eventms.organizer.utils.ValidationUtils.*;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Service
 public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> implements IEesEventService {
+    EesFaqMapper faqMapper;
     EesEventMapper eventMapper;
     EesVenueMapper venueMapper;
+    EesAgendaMapper agendaMapper;
     EesTicketMapper ticketMapper;
     EesAttributeMapper attributeMapper;
     UesOrganizerMapper organizerMapper;
@@ -150,5 +151,20 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
     @Override
     public EventPublish unpublish(Long eventId) {
         return null;
+    }
+
+    @Override
+    public void content(Long eventId, EventContent eventContent) {
+        List<Module> modules = eventContent.getModules();
+        List<Widget> widgets = eventContent.getWidgets();
+
+        EesEvent eesEvent = eventConverter.toEventFrom(eventId, modules);
+        var pair = eventConverter.toWidgetsFrom(eventId, widgets);
+        List<EesAgenda> eesAgendas = pair.getKey();
+        List<EesFaq> eesFaqs = pair.getValue();
+
+        this.saveOrUpdate(eesEvent);
+        agendaMapper.insertOrUpdate(eesAgendas);
+        faqMapper.insertOrUpdate(eesFaqs);
     }
 }

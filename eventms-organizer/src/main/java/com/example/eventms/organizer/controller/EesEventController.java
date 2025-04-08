@@ -1,10 +1,7 @@
 package com.example.eventms.organizer.controller;
 
 import com.example.eventms.common.adapter.CommonResult;
-import com.example.eventms.organizer.dto.EventDetail;
-import com.example.eventms.organizer.dto.EventPayload;
-import com.example.eventms.organizer.dto.EventPublish;
-import com.example.eventms.organizer.dto.EventResult;
+import com.example.eventms.organizer.dto.*;
 import com.example.eventms.organizer.service.IEesEventService;
 import com.example.eventms.organizer.utils.ParamUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,6 +40,13 @@ public class EesEventController {
         List<String> paramList = ParamUtils.parse(expand);
         EventDetail eventDetail = eventService.detail(eventId, paramList);
         return CommonResult.success(eventDetail);
+    }
+
+    @RequestMapping(value = "/{eventId}/content", method = RequestMethod.POST)
+    public CommonResult<?> content(@PathVariable Long eventId,
+                                   @RequestBody EventContent eventContent) {
+        eventService.content(eventId, eventContent);
+        return CommonResult.success(null);
     }
 
     @RequestMapping(value = "/{eventId}/publish", method = RequestMethod.POST)

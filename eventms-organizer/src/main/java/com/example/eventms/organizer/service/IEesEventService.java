@@ -2,10 +2,7 @@ package com.example.eventms.organizer.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.eventms.mbp.entity.EesEvent;
-import com.example.eventms.organizer.dto.EventDetail;
-import com.example.eventms.organizer.dto.EventPayload;
-import com.example.eventms.organizer.dto.EventPublish;
-import com.example.eventms.organizer.dto.EventResult;
+import com.example.eventms.organizer.dto.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -30,4 +27,7 @@ public interface IEesEventService extends IService<EesEvent> {
 
     @Transactional
     EventPublish unpublish(Long eventId);
+
+    @Transactional
+    void content(Long eventId, EventContent eventContent);
 }

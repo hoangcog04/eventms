@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/eesFaqs")
-public class EesFaqsController {
+public class EesFaqController {
 
 }

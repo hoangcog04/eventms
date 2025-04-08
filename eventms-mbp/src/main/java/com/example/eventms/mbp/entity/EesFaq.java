@@ -23,9 +23,9 @@ import java.io.Serializable;
 @Setter
 @ToString
 @FieldNameConstants
-@TableName("ees_faqs")
-@Schema(name = "EesFaqs", description = "")
-public class EesFaqs implements Serializable {
+@TableName("ees_faq")
+@Schema(name = "EesFaq", description = "")
+public class EesFaq implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

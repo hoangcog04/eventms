@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +33,15 @@ public class EesCoupon implements Serializable {
     private String name;
 
     @Schema(description = "Quantity")
-    private Integer count;
+    private Integer quantity;
 
-    @Schema(description = "Number of times this Discount can be used")
-    private Integer quantityAvailable;
+    @Schema(description = "Number of times this Discount has been used")
+    private Integer useCount;
+
+    @Schema(description = "0->amount off;1->percent off")
+    private Integer useType;
+
+    private BigDecimal amountOff;
 
     private Integer percentOff;
 
@@ -45,6 +51,8 @@ public class EesCoupon implements Serializable {
 
     private String code;
 
-    @Schema(description = "Event ID for applicable discount. Leave empty for all events")
-    private String couponEventId;
+    private Long eventId;
+
+    @Schema(description = "Separated by commas. Leave empty for all the tickets")
+    private String ticketIds;
 }

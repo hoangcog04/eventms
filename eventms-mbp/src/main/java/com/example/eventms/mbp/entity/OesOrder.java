@@ -40,9 +40,6 @@ public class OesOrder implements Serializable {
     @Schema(description = "Order serial number")
     private String orderSn;
 
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime created;
-
     @Schema(description = "Order owner name")
     private String ownerName;
 
@@ -58,7 +55,7 @@ public class OesOrder implements Serializable {
     @Schema(description = "0->Default; 1->Offline; 2->Payments system")
     private Integer checkoutMethod;
 
-    @Schema(description = "0->Pending;1->Completed;2->Canceled;3->Refunded")
+    @Schema(description = "0->Default;1->Started;2->Pending;3->Completed;4->Abandoned")
     private Integer status;
 
     @Schema(description = "0->Email;1->Phone")
@@ -76,4 +73,10 @@ public class OesOrder implements Serializable {
     private LocalDateTime paymentTime;
 
     private LocalDateTime deliveryTime;
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime created;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime changed;
 }

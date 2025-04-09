@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.eventms.mbp.mapper.OesOrderAttendeeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.OesOrderAttendee">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="order_sn" property="orderSn" />
+        <result column="ticket_id" property="ticketId" />
+        <result column="ticket_name" property="ticketName" />
+        <result column="ticket_pic" property="ticketPic" />
+        <result column="ticket_price" property="ticketPrice" />
+        <result column="ticket_quantity" property="ticketQuantity" />
+        <result column="real_amount" property="realAmount" />
+        <result column="coupon_amount" property="couponAmount" />
+        <result column="bill_receiver_email" property="billReceiverEmail" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="refunded" property="refunded" />
+        <result column="created" property="created" />
+        <result column="changed" property="changed" />
+    </resultMap>
+
+</mapper>

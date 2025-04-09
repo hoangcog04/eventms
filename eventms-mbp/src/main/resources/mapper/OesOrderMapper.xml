@@ -8,7 +8,6 @@
         <result column="user_id" property="userId" />
         <result column="event_id" property="eventId" />
         <result column="order_sn" property="orderSn" />
-        <result column="created" property="created" />
         <result column="owner_name" property="ownerName" />
         <result column="total_amount" property="totalAmount" />
         <result column="pay_amount" property="payAmount" />
@@ -21,6 +20,8 @@
         <result column="deleted" property="deleted" />
         <result column="payment_time" property="paymentTime" />
         <result column="delivery_time" property="deliveryTime" />
+        <result column="created" property="created" />
+        <result column="changed" property="changed" />
     </resultMap>
 
 </mapper>

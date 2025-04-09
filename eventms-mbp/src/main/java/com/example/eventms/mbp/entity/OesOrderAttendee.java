@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
@@ -24,42 +23,43 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("ees_ticket")
-@Schema(name = "EesTicket", description = "")
-public class EesTicket implements Serializable {
+@TableName("oes_order_attendee")
+@Schema(name = "OesOrderAttendee", description = "")
+public class OesOrderAttendee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long eventId;
+    private Long orderId;
 
-    private String name;
+    @Schema(description = "Order serial number")
+    private String orderSn;
 
-    private String summary;
+    private Long ticketId;
 
-    private String pic;
+    private String ticketName;
 
-    private BigDecimal price;
+    private String ticketPic;
 
-    @Schema(description = "Initial number of this ticket")
-    private Integer capacity;
+    private BigDecimal ticketPrice;
 
-    @Schema(description = "The number of sold tickets")
-    private Integer quantitySold;
+    private Integer ticketQuantity;
 
-    @Schema(description = "Maximum number per order (blank uses default value 10)")
-    private Integer maxQuantityPerOrder;
+    @Schema(description = "Actual payment amount")
+    private BigDecimal realAmount;
 
-    private Integer sorting;
+    @Schema(description = "Coupon discount amount")
+    private BigDecimal couponAmount;
 
-    private Integer isFree;
+    @Schema(description = "Same information as Order owner")
+    private String billReceiverEmail;
 
-    private Integer isHidden;
+    @Schema(description = "Same information as Order owner")
+    private String receiverName;
 
-    @TableLogic
-    private Integer deleted;
+    private Integer refunded;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;

@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.eventms.mbp.entity.EesCheckoutSetting;
 import com.example.eventms.mbp.entity.EesTicket;
+import com.example.eventms.mbp.entity.EesTicketStock;
 import com.example.eventms.mbp.mapper.EesCheckoutSettingMapper;
 import com.example.eventms.mbp.mapper.EesTicketMapper;
+import com.example.eventms.mbp.mapper.EesTicketStockMapper;
 import com.example.eventms.organizer.dto.TicketItem;
 import com.example.eventms.organizer.dto.TicketPayload;
 import com.example.eventms.organizer.mapper.TicketConverter;
@@ -17,7 +19,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 import static com.example.eventms.organizer.constant.BusinessConstants.DEFAULT_CHECKOUT_METHOD;
+import static com.example.eventms.organizer.constant.BusinessConstants.DEFAULT_QUANTITY_LOCK;
 
 /**
  * <p>
@@ -31,17 +36,24 @@ import static com.example.eventms.organizer.constant.BusinessConstants.DEFAULT_C
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Service
 public class EesTicketServiceImpl extends ServiceImpl<EesTicketMapper, EesTicket> implements IEesTicketService {
-    EesTicketMapper ticketMapper;
+    EesTicketStockMapper ticketStockMapper;
     EesCheckoutSettingMapper checkoutStgMapper;
     TicketConverter ticketConverter;
 
     @Override
     public TicketItem add(Long eventId, TicketPayload ticketPayload) {
         EesTicket eesTicket = ticketConverter.toEntity(ticketPayload);
+        if (eesTicket.getPrice().compareTo(BigDecimal.ZERO) == 0) eesTicket.setIsFree(1);
         eesTicket.setEventId(eventId);
-        ticketMapper.insert(eesTicket);
+        save(eesTicket);
 
-        eesTicket = ticketMapper.selectById(eesTicket.getId());
+        EesTicketStock ticketStock = new EesTicketStock();
+        ticketStock.setTicketId(eesTicket.getId());
+        ticketStock.setQuantityAvailable(eesTicket.getCapacity());
+        ticketStock.setQuantityLock(DEFAULT_QUANTITY_LOCK);
+        ticketStockMapper.insert(ticketStock);
+
+        eesTicket = getById(eesTicket.getId());
 
         String currency = getCurrency(eventId);
         return ticketConverter.toDto(eesTicket, eesTicket.getPrice(), currency);

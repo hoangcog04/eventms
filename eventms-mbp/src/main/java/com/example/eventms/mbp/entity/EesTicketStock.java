@@ -8,7 +8,6 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,39 +23,22 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@TableName("ees_ticket")
-@Schema(name = "EesTicket", description = "")
-public class EesTicket implements Serializable {
+@TableName("ees_ticket_stock")
+@Schema(name = "EesTicketStock", description = "")
+public class EesTicketStock implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long eventId;
+    private Long ticketId;
 
-    private String name;
+    @Schema(description = "Total available number of this ticket")
+    private Integer quantityAvailable;
 
-    private String summary;
-
-    private String pic;
-
-    private BigDecimal price;
-
-    @Schema(description = "Initial number of this ticket")
-    private Integer capacity;
-
-    @Schema(description = "The number of sold tickets")
-    private Integer quantitySold;
-
-    @Schema(description = "Maximum number per order (blank uses default value 10)")
-    private Integer maxQuantityPerOrder;
-
-    private Integer sorting;
-
-    private Integer isFree;
-
-    private Integer isHidden;
+    @Schema(description = "The number of locking tickets")
+    private Integer quantityLock;
 
     @TableLogic
     private Integer deleted;

@@ -36,14 +36,11 @@ import static java.util.stream.Collectors.toMap;
 @Service
 public class EesAttributeValueServiceImpl extends ServiceImpl<EesAttributeValueMapper, EesAttributeValue> implements IEesAttributeValueService {
     EesAttributeMapper attributeMapper;
-    EesAttributeValueMapper attributeValueMapper;
     AttrConverter attrConverter;
 
     @Override
     public List<EventProperty> getEventProperties(Long eventId) {
-        var propValueWrp = new LambdaQueryWrapper<EesAttributeValue>();
-        propValueWrp.eq(EesAttributeValue::getEventId, eventId);
-        List<EesAttributeValue> propValues = attributeValueMapper.selectList(propValueWrp);
+        List<EesAttributeValue> propValues = getAttrValueByEventId(eventId);
 
         List<Long> attrIds = propValues.stream().map(EesAttributeValue::getAttributeId).toList();
 
@@ -57,9 +54,7 @@ public class EesAttributeValueServiceImpl extends ServiceImpl<EesAttributeValueM
     @Override
     @Transactional
     public int updateEventProps(Long eventId, List<EventAttrPayload> payloads) {
-        var propValueWrp = new LambdaQueryWrapper<EesAttributeValue>();
-        propValueWrp.eq(EesAttributeValue::getEventId, eventId);
-        List<EesAttributeValue> propValues = attributeValueMapper.selectList(propValueWrp);
+        List<EesAttributeValue> propValues = getAttrValueByEventId(eventId);
 
         // to update instead of insert when it's already set
         Map<Long, EesAttributeValue> groupByAttrCateId = propValues.stream()
@@ -85,5 +80,11 @@ public class EesAttributeValueServiceImpl extends ServiceImpl<EesAttributeValueM
         this.saveOrUpdateBatch(entities);
 
         return 0;
+    }
+
+    private List<EesAttributeValue> getAttrValueByEventId(Long eventId) {
+        var attrValueWrp = new LambdaQueryWrapper<EesAttributeValue>();
+        attrValueWrp.eq(EesAttributeValue::getEventId, eventId);
+        return list(attrValueWrp);
     }
 }

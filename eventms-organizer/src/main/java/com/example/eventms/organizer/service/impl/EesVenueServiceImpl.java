@@ -26,20 +26,19 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Service
 public class EesVenueServiceImpl extends ServiceImpl<EesVenueMapper, EesVenue> implements IEesVenueService {
-    EesVenueMapper venueMapper;
     VenueConverter venueConverter;
 
     @Override
     public EesVenue add(VenuePayload venuePayload) {
         // Todo: add organizerId
         EesVenue eesVenue = venueConverter.toEntity(venuePayload);
-        venueMapper.insert(eesVenue);
+        save(eesVenue);
         return eesVenue;
     }
 
     @Override
     public EesVenue getItem(Long id) {
-        return venueMapper.selectById(id);
+        return getById(id);
     }
 
     @Override

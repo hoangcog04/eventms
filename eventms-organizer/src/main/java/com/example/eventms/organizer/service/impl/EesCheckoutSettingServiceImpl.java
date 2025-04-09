@@ -30,13 +30,12 @@ import java.util.List;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Service
 public class EesCheckoutSettingServiceImpl extends ServiceImpl<EesCheckoutSettingMapper, EesCheckoutSetting> implements IEesCheckoutSettingService {
-    EesCheckoutSettingMapper checkoutSettingMapper;
     CheckoutSettingConverter checkoutSettingConverter;
 
 
     @Override
     public CheckoutSettingDetail detail(Long checkoutSettingId) {
-        EesCheckoutSetting eesCheckoutSetting = checkoutSettingMapper.selectById(checkoutSettingId);
+        EesCheckoutSetting eesCheckoutSetting = getById(checkoutSettingId);
         return checkoutSettingConverter.toDetailDto(eesCheckoutSetting);
     }
 
@@ -49,20 +48,20 @@ public class EesCheckoutSettingServiceImpl extends ServiceImpl<EesCheckoutSettin
                 .eq(EesCheckoutSetting::getEventId, eventId)
                 .eq(EesCheckoutSetting::getCheckoutMethod, payload.getCheckoutMethod());
         // select id
-        List<Object> objects = checkoutSettingMapper.selectObjs(checkoutSettingWrp);
+        List<Object> objects = this.listObjs(checkoutSettingWrp);
 
         EesCheckoutSetting checkoutSetting = checkoutSettingConverter.toEntity(payload);
 
         if (CollectionUtils.isEmpty(objects)) { // save
             checkoutSetting.setEventId(eventId);
-            checkoutSettingMapper.insert(checkoutSetting); // has new id
+            save(checkoutSetting); // has new id
         } else { // update
             checkoutSetting.setId((Long) objects.get(0));
             checkoutSetting.setEventId(eventId);
-            checkoutSettingMapper.updateById(checkoutSetting);
+            updateById(checkoutSetting);
         }
 
-        EesCheckoutSetting entity = checkoutSettingMapper.selectById(checkoutSetting.getId());
+        EesCheckoutSetting entity = getById(checkoutSetting.getId());
         return checkoutSettingConverter.toResultDto(entity);
     }
 }

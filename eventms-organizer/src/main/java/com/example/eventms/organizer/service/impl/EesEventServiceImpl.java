@@ -41,12 +41,12 @@ import static com.example.eventms.organizer.utils.ValidationUtils.*;
 @Service
 public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> implements IEesEventService {
     EesFaqMapper faqMapper;
-    EesEventMapper eventMapper;
     EesVenueMapper venueMapper;
     EesAgendaMapper agendaMapper;
     EesTicketMapper ticketMapper;
     EesAttributeMapper attributeMapper;
     UesOrganizerMapper organizerMapper;
+    EesTicketStockMapper ticketStockMapper;
     EesAttributeValueMapper attributeValueMapper;
     EesCheckoutSettingMapper checkoutSettingMapper;
     EventConverter eventConverter;
@@ -62,20 +62,26 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
             eesEvent.setIsFree(1);
             eesTicket.setIsFree(1);
         }
-        eventMapper.insert(eesEvent);
+        save(eesEvent);
 
         eesTicket.setEventId(eesEvent.getId());
         eesTicket.setName(FIRST_TICKET_NAME);
-        eesTicket.setQuantityTotal(eesEvent.getCapacity());
+        eesTicket.setCapacity(eesEvent.getCapacity());
         eesTicket.setSorting(FIRST_TICKET_SORTING);
         ticketMapper.insert(eesTicket);
+
+        EesTicketStock ticketStock = new EesTicketStock();
+        ticketStock.setTicketId(eesTicket.getId());
+        ticketStock.setQuantityAvailable(eesTicket.getCapacity());
+        ticketStock.setQuantityLock(DEFAULT_QUANTITY_LOCK);
+        ticketStockMapper.insert(ticketStock);
 
         EesCheckoutSetting checkoutStg = new EesCheckoutSetting();
         checkoutStg.setEventId(eesEvent.getId());
         checkoutStg.setCheckoutMethod(DEFAULT_CHECKOUT_METHOD);
         checkoutSettingMapper.insert(checkoutStg);
 
-        eesEvent = eventMapper.selectById(eesEvent.getId());
+        eesEvent = getById(eesEvent.getId());
         eesTicket = ticketMapper.selectById(eesTicket.getId());
 
         EventResult.EventDto eventDto = eventConverter.toEventResultDto(eesEvent);
@@ -91,7 +97,7 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
     public EventDetail detail(Long eventId, List<String> paramList) {
         EventDetail eventDetail = new EventDetail();
 
-        EesEvent eesEvent = eventMapper.selectById(eventId);
+        EesEvent eesEvent = getById(eventId);
         EventDetail.EventDto eventDto = eventConverter.toEventDetailDto(eesEvent);
         eventDetail.setEvent(eventDto);
 
@@ -152,7 +158,7 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
     public EventPublish publish(Long eventId) {
         EventPublish eventPublish = new EventPublish();
 
-        EesEvent eesEvent = eventMapper.selectById(eventId);
+        EesEvent eesEvent = getById(eventId);
         if (isEventInvalid(eesEvent)) eventPublish.setErrorMessage(EVENT_FAIL_MSG);
 
         UesOrganizer uesOrganizer = organizerMapper.selectById(eesEvent.getOrganizerId());
@@ -164,7 +170,7 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
         if (isTicketsInvalid(eesTickets)) eventPublish.setErrorMessage(TICKET_FAIL_MSG);
 
         eesEvent.setPublishTime(LocalDateTime.now());
-        eventMapper.updateById(eesEvent);
+        updateById(eesEvent);
 
         return eventPublish;
     }
@@ -189,13 +195,11 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
             WidgetType wType = w.getType();
             JsonNode wData = w.getData();
 
-            if (wType == WidgetType.AGENDA)
-                eesAgendas = mergeWithExistingAgenda(eventId, wData);
-            else if (wType == WidgetType.FAQS)
-                eesFaqs = mergeWithExistingFaq(eventId, wData);
+            if (wType == WidgetType.AGENDA) eesAgendas = mergeWithExistingAgenda(eventId, wData);
+            else if (wType == WidgetType.FAQS) eesFaqs = mergeWithExistingFaq(eventId, wData);
         }
 
-        eventMapper.updateById(eesEvent);
+        updateById(eesEvent);
         agendaMapper.insertOrUpdate(eesAgendas);
         faqMapper.insertOrUpdate(eesFaqs);
     }

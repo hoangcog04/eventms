@@ -29,7 +29,6 @@ import java.util.List;
 @Service
 public class EesAttributeServiceImpl extends ServiceImpl<EesAttributeMapper, EesAttribute> implements IEesAttributeService {
     EesAttributeCategoryMapper attributeCategoryMapper;
-    EesAttributeMapper attributeMapper;
     AttrConverter attrConverter;
 
     @Override
@@ -42,7 +41,7 @@ public class EesAttributeServiceImpl extends ServiceImpl<EesAttributeMapper, Ees
         // sel * from attr where above `attrCategoryIds`
         var attrWrp = new LambdaQueryWrapper<EesAttribute>();
         attrWrp.in(EesAttribute::getAttributeCategoryId, attrCategoryIds);
-        List<EesAttribute> attrs = attributeMapper.selectList(attrWrp);
+        List<EesAttribute> attrs = list(attrWrp);
 
         return attrConverter.toAttrInfos(attrCategories, attrs);
     }

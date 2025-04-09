@@ -10,7 +10,7 @@
         <result column="summary" property="summary" />
         <result column="pic" property="pic" />
         <result column="price" property="price" />
-        <result column="quantity_total" property="quantityTotal" />
+        <result column="capacity" property="capacity" />
         <result column="quantity_sold" property="quantitySold" />
         <result column="max_quantity_per_order" property="maxQuantityPerOrder" />
         <result column="sorting" property="sorting" />

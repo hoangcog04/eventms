@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.eventms.common.constant.ParamConstants.*;
-import static com.example.eventms.organizer.constant.BusinessConstants.FIRST_TICKET_NAME;
-import static com.example.eventms.organizer.constant.BusinessConstants.FIRST_TICKET_SORTING;
+import static com.example.eventms.organizer.constant.BusinessConstants.*;
 import static com.example.eventms.organizer.constant.ValidateErrConstants.*;
 import static com.example.eventms.organizer.dto.EventContent.WidgetType;
 import static com.example.eventms.organizer.utils.ValidationUtils.*;
@@ -68,9 +67,13 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
         eesTicket.setEventId(eesEvent.getId());
         eesTicket.setName(FIRST_TICKET_NAME);
         eesTicket.setQuantityTotal(eesEvent.getCapacity());
-        eesTicket.setCapacity(eesEvent.getCapacity());
         eesTicket.setSorting(FIRST_TICKET_SORTING);
         ticketMapper.insert(eesTicket);
+
+        EesCheckoutSetting checkoutStg = new EesCheckoutSetting();
+        checkoutStg.setEventId(eesEvent.getId());
+        checkoutStg.setCheckoutMethod(DEFAULT_CHECKOUT_METHOD);
+        checkoutSettingMapper.insert(checkoutStg);
 
         eesEvent = eventMapper.selectById(eesEvent.getId());
         eesTicket = ticketMapper.selectById(eesTicket.getId());

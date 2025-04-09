@@ -86,6 +86,7 @@ public interface EventConverter {
         String sessionName = slot.path(EesAgenda.Fields.sessionName).asText();
         String summary = slot.path(EesAgenda.Fields.summary).asText();
         String hostName = slot.path(EesAgenda.Fields.hostName).asText();
+        Integer sorting = slot.path(EesAgenda.Fields.sorting).asInt();
         LocalTime startTime = LocalTime.parse(slot.path(EesAgenda.Fields.startTime).asText());
         LocalTime endTime = LocalTime.parse(slot.path(EesAgenda.Fields.endTime).asText());
 
@@ -94,6 +95,7 @@ public interface EventConverter {
         eesAgenda.setSessionName(sessionName);
         eesAgenda.setSummary(summary);
         eesAgenda.setHostName(hostName);
+        eesAgenda.setSorting(sorting);
         eesAgenda.setStartTime(startTime);
         eesAgenda.setEndTime(endTime);
 

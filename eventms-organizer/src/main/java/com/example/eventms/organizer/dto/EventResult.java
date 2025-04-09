@@ -89,9 +89,6 @@ public class EventResult implements Serializable {
         @Schema(description = "Total available number of this ticket")
         private Integer quantityTotal;
 
-        @Schema(description = "Total capacity of this ticket")
-        private Integer capacity;
-
         @Schema(description = "Maximum number per order (blank uses default value 10)")
         private Integer maxQuantityPerOrder;
 

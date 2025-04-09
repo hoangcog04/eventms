@@ -12,7 +12,6 @@
         <result column="price" property="price" />
         <result column="quantity_total" property="quantityTotal" />
         <result column="quantity_sold" property="quantitySold" />
-        <result column="capacity" property="capacity" />
         <result column="max_quantity_per_order" property="maxQuantityPerOrder" />
         <result column="sorting" property="sorting" />
         <result column="is_free" property="isFree" />

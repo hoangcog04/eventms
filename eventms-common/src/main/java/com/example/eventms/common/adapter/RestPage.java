@@ -1,5 +1,7 @@
 package com.example.eventms.common.adapter;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +36,17 @@ public class RestPage<T> {
         result.setObjectCount(page.getTotalElements());
         result.setPageCount(page.getTotalPages());
         result.setContent(page.getContent());
+        return result;
+    }
+
+    public static <T> RestPage<T> of(IPage<T> ipage) {
+        RestPage<T> result = new RestPage<>();
+        com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> page = (Page<T>) ipage;
+        result.setPageNum(page.getCurrent());
+        result.setPageSize(page.getSize());
+        result.setObjectCount(page.getTotal());
+        result.setPageCount(page.getTotal() / page.getSize() + 1);
+        result.setContent(page.getRecords());
         return result;
     }
 }

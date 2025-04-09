@@ -45,6 +45,7 @@ public class EesVenueServiceImpl extends ServiceImpl<EesVenueMapper, EesVenue> i
     @Override
     public Page<EesVenue> getList(Integer pageNum, Integer pageSize) {
         var wrp = new LambdaQueryWrapper<EesVenue>();
+        // Todo: add organizerId
         wrp.eq(EesVenue::getOrganizerId, 4);
         Page<EesVenue> page = new Page<>(pageNum, pageSize);
         return page(page, wrp);

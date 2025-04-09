@@ -1,19 +1,23 @@
 package com.example.eventms.mbp.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldNameConstants;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author vicendy04
@@ -56,7 +60,7 @@ public class EesEvent implements Serializable {
     @Schema(description = "0:Draft; 1:Live; 2:Started, 3: Ended, 4.Canceled")
     private Integer status;
 
-    @Schema(description = "Set event capacity to prevent overselling")
+    @Schema(description = "Set to prevent overselling. The capacity is calculated by the sum of the quantity_total of the Ticket.")
     private Integer capacity;
 
     private Integer isFree;

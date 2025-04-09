@@ -1,36 +1,27 @@
-package com.example.eventms.mbp.entity;
+package com.example.eventms.organizer.dto;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author vicendy04
- * @since 2025-04
+ * @since 2025-03
  */
 @Getter
 @Setter
-@ToString
-@TableName("ees_ticket")
-@Schema(name = "EesTicket", description = "")
-public class EesTicket implements Serializable {
+public class TicketItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private Long eventId;
@@ -41,7 +32,7 @@ public class EesTicket implements Serializable {
 
     private String pic;
 
-    private BigDecimal price;
+    private Cost cost;
 
     @Schema(description = "Total available number of this ticket")
     private Integer quantityTotal;
@@ -58,12 +49,18 @@ public class EesTicket implements Serializable {
 
     private Integer isHidden;
 
-    @TableLogic
-    private Integer deleted;
-
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime changed;
+
+    @Getter
+    @Setter
+    public static class Cost implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        private BigDecimal price;
+
+        private String currency;
+    }
 }

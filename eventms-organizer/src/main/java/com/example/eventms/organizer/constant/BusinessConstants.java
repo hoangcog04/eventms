@@ -6,5 +6,5 @@ public final class BusinessConstants {
 
     public static final String FIRST_TICKET_NAME = "General Admission";
     public static final Integer FIRST_TICKET_SORTING = 1000;
-    public static final String EVENT_FAIL_VALID = "organizer";
+    public static final Integer DEFAULT_CHECKOUT_METHOD = 0;
 }

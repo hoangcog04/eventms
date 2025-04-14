@@ -18,3 +18,15 @@ logging:
 #mybatis-plus.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
 #mybatis-plus.configuration.map-underscore-to-camel-case=true
 #mybatis-plus.global-config.db-config.id-type=auto
+
+rabbitmq:
+  host: localhost
+  port: 5672
+
+  username: guest
+  password: guest
+
+# Order timeout delay in milliseconds (5 minutes = 300000ms)
+order:
+  timeout:
+    delay: 300000

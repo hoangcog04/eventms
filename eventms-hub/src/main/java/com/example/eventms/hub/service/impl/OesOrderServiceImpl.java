@@ -3,6 +3,7 @@ package com.example.eventms.hub.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.eventms.common.exception.Asserts;
+import com.example.eventms.hub.component.CancelOrderSender;
 import com.example.eventms.hub.dto.OrderCompletion;
 import com.example.eventms.hub.dto.OrderParam;
 import com.example.eventms.hub.dto.OrderResult;
@@ -48,6 +49,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
     EesTicketStockMapper ticketStockMapper;
     OesOrderAttendeeMapper orderAttendeeMapper;
     OrderConverter orderConverter;
+    CancelOrderSender cancelOrderSender;
 
     @Override
     public OrderResult generateOrder(OrderParam orderParam) {
@@ -137,6 +139,8 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
             assert true;
         } else System.out.println("pass");
 
+        sendDelayMessageCancelOrder(order.getId());
+
         return orderConverter.toOrderResult(order, orderAttendees);
     }
 
@@ -197,6 +201,11 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
             // handle
             assert true;
         } else System.out.println("pass");
+    }
+
+    @Override
+    public void sendDelayMessageCancelOrder(Long orderId) {
+        cancelOrderSender.sendMessage(orderId);
     }
 
     private List<OesOrderAttendee> getOrderAttendeesByOrderId(Long orderId) {

@@ -25,4 +25,6 @@ public interface IOesOrderService extends IService<OesOrder> {
 
     @Transactional
     void abandonOrder(Long orderId);
+
+    void sendDelayMessageCancelOrder(Long orderId);
 }

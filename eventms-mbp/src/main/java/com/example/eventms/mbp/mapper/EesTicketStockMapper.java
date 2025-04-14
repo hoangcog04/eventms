@@ -15,8 +15,10 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface EesTicketStockMapper extends BaseMapper<EesTicketStock> {
-    int reserveTickets(@Param("ticketStockId") Long ticketStockId, @Param("quantity") Integer quantity);
+    int lockStockById(@Param("ticketStockId") Long ticketStockId, @Param("quantity") Integer quantity);
 
-    int confirmHeldTickets(@Param("stockId") Long stockId,@Param("reversedQty") Long reversedQty);
+    int commitLockedStockById(@Param("stockId") Long stockId, @Param("reversedQty") Long reversedQty);
+
+    int releaseLockedStockById(@Param("stockId") Long stockId, @Param("reversedQty") Long reversedQty);
 }
 

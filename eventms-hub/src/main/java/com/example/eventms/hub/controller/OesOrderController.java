@@ -35,8 +35,14 @@ public class OesOrderController {
 
     @RequestMapping(value = "/{orderId}/complete", method = RequestMethod.POST)
     public CommonResult<Integer> paySuccess(@PathVariable Long orderId,
-                                   @RequestBody OrderCompletion payload) {
+                                            @RequestBody OrderCompletion payload) {
         Integer count = orderService.paySuccess(orderId, payload);
         return CommonResult.success("Payment successful", count);
+    }
+
+    @RequestMapping(value = "/{orderId}/abandon", method = RequestMethod.POST)
+    public CommonResult<Void> abandonOrder(@PathVariable Long orderId) {
+        orderService.abandonOrder(orderId);
+        return CommonResult.success("Successful");
     }
 }

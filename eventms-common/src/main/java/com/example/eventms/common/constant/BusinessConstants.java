@@ -12,4 +12,5 @@ public final class BusinessConstants {
     public static final Integer DEFAULT_ORDER_DELIVERY_METHOD = 0;
     public static final Integer DEFAULT_ORDER_STATUS = 2;
     public static final Integer DEFAULT_ORDER_COMPLETION_STATUS = 3;
+    public static final Integer DEFAULT_ORDER_ABANDON_STATUS = 4;
 }

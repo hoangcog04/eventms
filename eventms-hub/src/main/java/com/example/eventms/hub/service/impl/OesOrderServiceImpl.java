@@ -114,7 +114,10 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         order.setTotalAmount(calcTotalAmount(orderAttendees));
         if (orderParam.getCouponId() == null) {
             order.setCouponAmount(new BigDecimal(0));
-        } else assert true;
+        } else {
+            order.setCouponId(orderParam.getCouponId());
+            // calc coupon
+        }
         order.setCheckoutMethod(DEFAULT_ORDER_CHECKOUT_METHOD);
         order.setCheckoutMethod(DEFAULT_ORDER_DELIVERY_METHOD);
         order.setStatus(DEFAULT_ORDER_STATUS);
@@ -144,17 +147,14 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         order.setDeliveryMethod(payload.getDeliveryMethod());
         order.setPaymentTime(LocalDateTime.now());
 
-        var wrp = new LambdaUpdateWrapper<OesOrder>();
-        wrp.eq(OesOrder::getId, orderId).eq(OesOrder::getStatus, DEFAULT_ORDER_STATUS);
-        boolean updated = update(order, wrp);
+        var orderWrp = new LambdaUpdateWrapper<OesOrder>();
+        orderWrp.eq(OesOrder::getId, orderId).eq(OesOrder::getStatus, DEFAULT_ORDER_STATUS);
+        boolean updated = update(order, orderWrp);
 
         if (!updated) Asserts.fail("Order not found or has an unexpected status");
 
 
-        var wrp2 = new LambdaUpdateWrapper<OesOrderAttendee>();
-        wrp2.eq(OesOrderAttendee::getOrderId, orderId);
-        List<OesOrderAttendee> orderAttendees = orderAttendeeMapper.selectList(wrp2);
-
+        List<OesOrderAttendee> orderAttendees = getOrderAttendeesByOrderId(orderId);
 
         Map<Long, Long> stockIdToReservedQtyMap = orderAttendees.stream()
                 .collect(groupingBy(OesOrderAttendee::getTicketStockId, counting()));
@@ -163,12 +163,46 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         for (Entry<Long, Long> e : stockIdToReservedQtyMap.entrySet()) {
             Long stockId = e.getKey();
             Long reversedQty = e.getValue();
-            int count = ticketStockMapper.confirmHeldTickets(stockId, reversedQty);
+            int count = ticketStockMapper.commitLockedStockById(stockId, reversedQty);
             if (count == 0) Asserts.fail("Insufficient inventory");
             totalCount += count;
         }
 
         return totalCount;
+    }
+
+    @Override
+    public void abandonOrder(Long orderId) {
+        var orderWrp = new LambdaUpdateWrapper<OesOrder>();
+        orderWrp.eq(OesOrder::getId, orderId).eq(OesOrder::getStatus, DEFAULT_ORDER_STATUS);
+        OesOrder abandonOrder = getOne(orderWrp);
+
+        if (abandonOrder == null) Asserts.fail("Order not found or has an unexpected status");
+        abandonOrder.setStatus(DEFAULT_ORDER_ABANDON_STATUS);
+        updateById(abandonOrder);
+
+        List<OesOrderAttendee> orderAttendees = getOrderAttendeesByOrderId(orderId);
+
+        Map<Long, Long> stockIdToReservedQtyMap = orderAttendees.stream()
+                .collect(groupingBy(OesOrderAttendee::getTicketStockId, counting()));
+
+        for (Entry<Long, Long> e : stockIdToReservedQtyMap.entrySet()) {
+            Long stockId = e.getKey();
+            Long reversedQty = e.getValue();
+            int count = ticketStockMapper.releaseLockedStockById(stockId, reversedQty);
+            if (count == 0) Asserts.fail("Insufficient inventory");
+        }
+
+        if (abandonOrder.getCouponId() != null) {
+            // handle
+            assert true;
+        } else System.out.println("pass");
+    }
+
+    private List<OesOrderAttendee> getOrderAttendeesByOrderId(Long orderId) {
+        var orderAttendeeWrp = new LambdaUpdateWrapper<OesOrderAttendee>();
+        orderAttendeeWrp.eq(OesOrderAttendee::getOrderId, orderId);
+        return orderAttendeeMapper.selectList(orderAttendeeWrp);
     }
 
     private boolean isQuantityExceedingMaxPerOrder(List<TicketDetail> ts, Map<Long, Integer> tQuantityMap) {
@@ -197,7 +231,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
 
     private void reserveTickets(List<TicketDetail> ts, Map<Long, Integer> tQuantityMap) {
         for (TicketDetail t : ts) {
-            int count = ticketStockMapper.reserveTickets(
+            int count = ticketStockMapper.lockStockById(
                     t.getStock().getId(),
                     tQuantityMap.get(t.getId())
             );

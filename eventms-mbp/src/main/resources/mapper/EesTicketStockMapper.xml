@@ -13,15 +13,23 @@
         <result column="changed" property="changed" />
     </resultMap>
 
-    <update id="reserveTickets">
+    <update id="lockStockById">
         UPDATE
             eventms.ees_ticket_stock
-        SET quantity_lock      = quantity_lock + #{quantity},
-            quantity_available = quantity_available - #{quantity}
+        SET quantity_lock      = quantity_lock + #{quantity}
         WHERE id = #{ticketStockId}
-          AND quantity_available &gt;= #{quantity}
+          AND quantity_lock + #{quantity} &lt;= quantity_available
     </update>
-    <update id="confirmHeldTickets">
+    <update id="commitLockedStockById">
+        UPDATE
+            eventms.ees_ticket_stock
+        SET quantity_lock = quantity_lock - #{reversedQty},
+            quantity_available = quantity_available - #{quantity}
+        WHERE id = #{stockId}
+          AND quantity_lock &gt;= #{reversedQty}
+          AND quantity_available &gt;= #{reversedQty}
+    </update>
+    <update id="releaseLockedStockById">
         UPDATE
             eventms.ees_ticket_stock
         SET quantity_lock = quantity_lock - #{reversedQty}

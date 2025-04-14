@@ -7,6 +7,7 @@
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
         <result column="event_id" property="eventId" />
+        <result column="coupon_id" property="couponId" />
         <result column="order_sn" property="orderSn" />
         <result column="owner_name" property="ownerName" />
         <result column="total_amount" property="totalAmount" />

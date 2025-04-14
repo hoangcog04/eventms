@@ -37,6 +37,8 @@ public class OesOrder implements Serializable {
 
     private Long eventId;
 
+    private Long couponId;
+
     @Schema(description = "Order serial number")
     private String orderSn;
 

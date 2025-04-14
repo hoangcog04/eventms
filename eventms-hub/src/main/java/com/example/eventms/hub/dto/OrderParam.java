@@ -1,4 +1,4 @@
-package com.example.eventms.organizer.dto;
+package com.example.eventms.hub.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -23,11 +23,11 @@ public class OrderParam implements Serializable {
 
     private Long eventId;
 
-    // Todo:
+    // Todo
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long couponId;
 
-    private List<TicketDto> attrCategory;
+    private List<TicketDto> tickets;
 
     @Getter
     @Setter
@@ -36,5 +36,7 @@ public class OrderParam implements Serializable {
         private static final long serialVersionUID = 1L;
 
         private Long ticketId;
+
+        private Integer quantity;
     }
 }

@@ -47,6 +47,8 @@ public class OesOrderAttendee implements Serializable {
 
     private Integer ticketQuantity;
 
+    private Long ticketStockId;
+
     @Schema(description = "Actual payment amount")
     private BigDecimal realAmount;
 

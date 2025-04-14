@@ -84,7 +84,6 @@ public class MyBatisPlusGenerator {
                     .addTableFills(new Column("created", FieldFill.INSERT))
                     .addTableFills(new Column("changed", FieldFill.INSERT_UPDATE));
             builder.mapperBuilder()
-                    .enableFileOverride()
                     .mapperAnnotation(Mapper.class)
                     .enableBaseResultMap();
             builder.serviceBuilder()

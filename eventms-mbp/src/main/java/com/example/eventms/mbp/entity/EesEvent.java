@@ -60,7 +60,7 @@ public class EesEvent implements Serializable {
     @Schema(description = "0:Draft; 1:Live; 2:Started, 3: Ended, 4.Canceled")
     private Integer status;
 
-    @Schema(description = "Set to prevent overselling. The capacity is calculated by the sum of the quantity_total of the Ticket.")
+    @Schema(description = "Set to prevent overselling. The capacity is calculated by the sum of the capacity of the Ticket.")
     private Integer capacity;
 
     private Integer isFree;

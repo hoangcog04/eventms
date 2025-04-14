@@ -1,13 +1,13 @@
 package com.example.eventms.mbp.mapper;
 
-import com.example.eventms.mbp.entity.EesTicketStock;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
+import com.example.eventms.mbp.entity.EesTicketStock;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author vicendy04
@@ -15,6 +15,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface EesTicketStockMapper extends BaseMapper<EesTicketStock> {
+    int reserveTickets(@Param("ticketStockId") Long ticketStockId, @Param("quantity") Integer quantity);
 
+    int confirmHeldTickets(@Param("stockId") Long stockId,@Param("reversedQty") Long reversedQty);
 }
 

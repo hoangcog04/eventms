@@ -13,4 +13,19 @@
         <result column="changed" property="changed" />
     </resultMap>
 
+    <update id="reserveTickets">
+        UPDATE
+            eventms.ees_ticket_stock
+        SET quantity_lock      = quantity_lock + #{quantity},
+            quantity_available = quantity_available - #{quantity}
+        WHERE id = #{ticketStockId}
+          AND quantity_available &gt;= #{quantity}
+    </update>
+    <update id="confirmHeldTickets">
+        UPDATE
+            eventms.ees_ticket_stock
+        SET quantity_lock = quantity_lock - #{reversedQty}
+        WHERE id = #{stockId}
+          AND quantity_lock &gt;= #{reversedQty}
+    </update>
 </mapper>

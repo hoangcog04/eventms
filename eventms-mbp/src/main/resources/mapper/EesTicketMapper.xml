@@ -4,21 +4,46 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.EesTicket">
-        <id column="id" property="id" />
-        <result column="event_id" property="eventId" />
-        <result column="name" property="name" />
-        <result column="summary" property="summary" />
-        <result column="pic" property="pic" />
-        <result column="price" property="price" />
-        <result column="capacity" property="capacity" />
-        <result column="quantity_sold" property="quantitySold" />
-        <result column="max_quantity_per_order" property="maxQuantityPerOrder" />
-        <result column="sorting" property="sorting" />
-        <result column="is_free" property="isFree" />
-        <result column="is_hidden" property="isHidden" />
-        <result column="deleted" property="deleted" />
-        <result column="created" property="created" />
-        <result column="changed" property="changed" />
+        <id column="id" property="id"/>
+        <result column="event_id" property="eventId"/>
+        <result column="name" property="name"/>
+        <result column="summary" property="summary"/>
+        <result column="pic" property="pic"/>
+        <result column="price" property="price"/>
+        <result column="capacity" property="capacity"/>
+        <result column="quantity_sold" property="quantitySold"/>
+        <result column="max_quantity_per_order" property="maxQuantityPerOrder"/>
+        <result column="sorting" property="sorting"/>
+        <result column="is_free" property="isFree"/>
+        <result column="is_hidden" property="isHidden"/>
+        <result column="deleted" property="deleted"/>
+        <result column="created" property="created"/>
+        <result column="changed" property="changed"/>
+    </resultMap>
+    <resultMap id="TickDetailMap" type="com.example.eventms.mbp.domain.TicketDetail" extends="BaseResultMap">
+        <association columnPrefix="stock_"
+                     property="stock"
+                     resultMap="com.example.eventms.mbp.mapper.EesTicketStockMapper.BaseResultMap"/>
     </resultMap>
 
+    <select id="getTicketDetail" resultMap="TickDetailMap">
+        SELECT
+        t.*,
+        s.id as stock_id,
+        s.ticket_id as stock_ticket_id,
+        s.quantity_available as stock_quantity_available,
+        s.quantity_lock as stock_quantity_lock,
+        s.deleted as stock_deleted,
+        s.created as stock_created,
+        s.changed as stock_changed
+        FROM
+        eventms.ees_ticket t
+        LEFT JOIN eventms.ees_ticket_stock s ON t.id = s.ticket_id
+        WHERE
+        t.id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND t.deleted = 0
+    </select>
 </mapper>

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.eventms.common.constant.ParamConstants.*;
-import static com.example.eventms.organizer.constant.BusinessConstants.*;
+import static com.example.eventms.common.constant.BusinessConstants.*;
 import static com.example.eventms.organizer.constant.ValidateErrConstants.*;
 import static com.example.eventms.organizer.dto.EventContent.WidgetType;
 import static com.example.eventms.organizer.utils.ValidationUtils.*;

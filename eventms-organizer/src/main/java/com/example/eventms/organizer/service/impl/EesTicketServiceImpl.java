@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-import static com.example.eventms.organizer.constant.BusinessConstants.DEFAULT_CHECKOUT_METHOD;
-import static com.example.eventms.organizer.constant.BusinessConstants.DEFAULT_QUANTITY_LOCK;
+import static com.example.eventms.common.constant.BusinessConstants.DEFAULT_CHECKOUT_METHOD;
+import static com.example.eventms.common.constant.BusinessConstants.DEFAULT_QUANTITY_LOCK;
 
 /**
  * <p>

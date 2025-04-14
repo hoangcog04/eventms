@@ -12,6 +12,7 @@
         <result column="ticket_pic" property="ticketPic" />
         <result column="ticket_price" property="ticketPrice" />
         <result column="ticket_quantity" property="ticketQuantity" />
+        <result column="ticket_stock_id" property="ticketStockId" />
         <result column="real_amount" property="realAmount" />
         <result column="coupon_amount" property="couponAmount" />
         <result column="bill_receiver_email" property="billReceiverEmail" />

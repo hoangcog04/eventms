@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +15,17 @@ import org.springframework.stereotype.Component;
 public class CancelOrderReceiver {
     IOesOrderService orderService;
 
-    @RabbitListener(queues = "order.cancel")
-    @RabbitHandler
-    public void handle(Long orderId) {
-        orderService.abandonOrder(orderId);
+    @RabbitListener(queues = "order.cancel", containerFactory = "retryContainerFactory")
+    public void handleCancelOrder(Long orderId) {
         log.info("processing abandon orderId:{}", orderId);
+        orderService.abandonOrder(orderId);
+        log.info("successfully abandon orderId:{}", orderId);
+    }
+
+    @RabbitListener(queues = "order.cancel.parking", containerFactory = "retryContainerFactory")
+    public void handleOrderParking(Long orderId) {
+        log.info("logging parking orderId:{}", orderId);
+        // pass
+        log.info("successfully parking orderId:{}", orderId);
     }
 }

@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Component;
 
+import static com.example.eventms.hub.domain.QueueEnum.*;
+
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -16,8 +18,8 @@ public class CancelOrderSender {
     AmqpTemplate amqpTemplate;
 
     public void sendMessage(Long orderId) {
-        amqpTemplate.convertAndSend(QueueEnum.QUEUE_TTL_ORDER_CANCEL.getExchange(),
-                QueueEnum.QUEUE_TTL_ORDER_CANCEL.getRouteKey(),
+        amqpTemplate.convertAndSend(QUEUE_TTL_ORDER_CANCEL.getExchange(),
+                QUEUE_TTL_ORDER_CANCEL.getRouteKey(),
                 orderId);
         log.info("send orderId:{}", orderId);
     }

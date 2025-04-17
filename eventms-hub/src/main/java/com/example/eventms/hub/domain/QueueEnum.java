@@ -2,13 +2,13 @@ package com.example.eventms.hub.domain;
 
 import lombok.Getter;
 
-import static com.example.eventms.hub.domain.ExchangeEnum.ORDER;
-
 @Getter
 public enum QueueEnum {
-    QUEUE_ORDER_CANCEL(ORDER.getName(), "order.cancel", "order.cancel"),
+    QUEUE_ORDER_CANCEL(ExchangeEnum.ORDER.getName(), "order.cancel", "order.cancel"),
 
-    QUEUE_TTL_ORDER_CANCEL(ORDER.getName(), "order.cancel.ttl", "order.cancel.ttl");
+    QUEUE_TTL_ORDER_CANCEL(ExchangeEnum.ORDER.getName(), "order.cancel.ttl", "order.cancel.ttl"),
+
+    QUEUE_PARKING(ExchangeEnum.ORDER.getName(), "order.cancel.parking", "order.cancel.parking");
 
     private final String exchange;
     private final String name;

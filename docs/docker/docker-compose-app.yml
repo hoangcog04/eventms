@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  eventms-organizer:
+    image: eventms-organizer:1.0-SNAPSHOT
+    container_name: eventms-organizer
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker-data/app/eventms-organizer/logs:/var/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - mysql
+  eventms-hub:
+    image: eventms-hub:1.0-SNAPSHOT
+    container_name: eventms-hub
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./docker-data/app/eventms-hub/logs:/var/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    depends_on:
+      - mysql
+      - rabbitmq

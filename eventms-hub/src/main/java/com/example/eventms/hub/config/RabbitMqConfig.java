@@ -5,6 +5,7 @@ import com.example.eventms.hub.domain.QueueEnum;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,18 @@ public class RabbitMqConfig {
 
     @Value("${order.timeout.delay}")
     private Integer orderTimeoutDelay;
+
+    @Value("${rabbitmq.host}")
+    private String host;
+
+    @Value("${rabbitmq.port}")
+    private int port;
+
+    @Value("${rabbitmq.username}")
+    private String username;
+
+    @Value("${rabbitmq.password}")
+    private String password;
 
     private static final int MAX_ATTEMPTS = 3;
 
@@ -75,6 +88,16 @@ public class RabbitMqConfig {
                 .bind(orderTtlQueue)
                 .to(orderTtlDirect)
                 .with(QueueEnum.QUEUE_TTL_ORDER_CANCEL.getRouteKey());
+    }
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setHost(host);
+        connectionFactory.setPort(port);
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
+        return connectionFactory;
     }
 
     @Bean

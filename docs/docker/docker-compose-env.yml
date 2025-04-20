@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    volumes:
+      - ../sql/eventms.sql:/docker-entrypoint-initdb.d/eventms.sql:ro
+      - ./docker-data/env/mysql/data:/var/lib/mysql
+      - ./docker-data/env/mysql/log:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eventms
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    volumes:
+      - ./docker-data/env/rabbitmq/data:/var/lib/rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'

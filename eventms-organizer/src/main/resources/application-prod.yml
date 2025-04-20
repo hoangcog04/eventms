@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8080
 
 spring:
   datasource:
@@ -7,14 +7,3 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-rabbitmq:
-  host: rabbitmq
-  port: 5672
-  username: guest
-  password: guest
-
-# Order timeout delay in milliseconds (5 minutes = 300000ms)
-order:
-  timeout:
-    delay: 300000

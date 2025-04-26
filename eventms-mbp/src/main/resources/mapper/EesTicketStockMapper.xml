@@ -36,4 +36,10 @@
         WHERE id = #{stockId}
           AND quantity_lock &gt;= #{reversedQty}
     </update>
+    <update id="restoreTicketQty">
+        UPDATE
+            eventms.ees_ticket_stock
+        SET quantity_available = quantity_available + #{restoreQty}
+        WHERE ticket_id = #{ticketId}
+    </update>
 </mapper>

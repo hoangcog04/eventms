@@ -1,8 +1,10 @@
 package com.example.eventms.hub.mapper;
 
 import com.example.eventms.hub.dto.OrderResult;
+import com.example.eventms.hub.dto.RefundRequestPayload;
 import com.example.eventms.mbp.entity.OesOrder;
 import com.example.eventms.mbp.entity.OesOrderAttendee;
+import com.example.eventms.mbp.entity.OesRefundRequest;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public interface OrderConverter {
     OrderResult.AttendeeCost toAttendeeCost(OesOrderAttendee entity);
 
     OrderResult.AttendeeDto toAttendeeDto(OesOrderAttendee entity);
+
+    OesRefundRequest toEntity(RefundRequestPayload dt);
 
     default OrderResult.OrderDto toResultOrder(OesOrder entity) {
         OrderResult.OrderDto order = toOrderDto(entity);

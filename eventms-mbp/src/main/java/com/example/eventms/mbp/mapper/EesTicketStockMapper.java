@@ -20,5 +20,7 @@ public interface EesTicketStockMapper extends BaseMapper<EesTicketStock> {
     int commitLockedStockById(@Param("stockId") Long stockId, @Param("reversedQty") Long reversedQty);
 
     int releaseLockedStockById(@Param("stockId") Long stockId, @Param("reversedQty") Long reversedQty);
+
+    int restoreTicketQty(@Param("ticketId") Long ticketId, @Param("restoreQty") Long restoreQty);
 }
 

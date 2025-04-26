@@ -5,17 +5,21 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.eventms.mbp.entity.OesRefundItem">
         <id column="id" property="id" />
-        <result column="order_id" property="orderId" />
-        <result column="order_sn" property="orderSn" />
+        <result column="refund_request_id" property="refundRequestId" />
         <result column="ticket_id" property="ticketId" />
-        <result column="created" property="created" />
         <result column="ticket_name" property="ticketName" />
         <result column="order_ticket_price" property="orderTicketPrice" />
         <result column="order_ticket_quantity" property="orderTicketQuantity" />
         <result column="real_amount" property="realAmount" />
         <result column="coupon_amount" property="couponAmount" />
-        <result column="quantity_processed" property="quantityProcessed" />
+        <result column="refund_qty" property="refundQty" />
+        <result column="refund_amount" property="refundAmount" />
+        <result column="qty_processed" property="qtyProcessed" />
         <result column="amount_processed" property="amountProcessed" />
+        <result column="bill_receiver_email" property="billReceiverEmail" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="created" property="created" />
+        <result column="changed" property="changed" />
     </resultMap>
 
 </mapper>

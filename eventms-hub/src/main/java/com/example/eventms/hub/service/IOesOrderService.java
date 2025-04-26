@@ -5,7 +5,10 @@ import com.example.eventms.hub.dto.OrderCompletion;
 import com.example.eventms.hub.dto.OrderParam;
 import com.example.eventms.hub.dto.OrderResult;
 import com.example.eventms.mbp.entity.OesOrder;
+import com.example.eventms.mbp.entity.OesOrderAttendee;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -27,4 +30,6 @@ public interface IOesOrderService extends IService<OesOrder> {
     void abandonOrder(Long orderId);
 
     void sendDelayMessageCancelOrder(Long orderId);
+
+    List<OesOrderAttendee> getAttendeesByOrderId(Long orderId);
 }

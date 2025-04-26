@@ -28,6 +28,10 @@
         </dependency>
         <dependency>
             <groupId>com.example.eventms</groupId>
+            <artifactId>eventms-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example.eventms</groupId>
             <artifactId>eventms-mbp</artifactId>
         </dependency>
     </dependencies>

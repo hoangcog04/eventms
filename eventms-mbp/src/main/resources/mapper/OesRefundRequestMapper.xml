@@ -10,7 +10,6 @@
         <result column="event_id" property="eventId" />
         <result column="user_id" property="userId" />
         <result column="created" property="created" />
-        <result column="item_type" property="itemType" />
         <result column="changed" property="changed" />
         <result column="from_name" property="fromName" />
         <result column="from_email" property="fromEmail" />
@@ -18,7 +17,7 @@
         <result column="reason" property="reason" />
         <result column="checkout_method" property="checkoutMethod" />
         <result column="delivery_method" property="deliveryMethod" />
-        <result column="pay_amount" property="payAmount" />
+        <result column="order_pay_amount" property="orderPayAmount" />
         <result column="status" property="status" />
     </resultMap>
 

@@ -1,5 +1,6 @@
 package com.example.eventms.hub.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.eventms.common.exception.Asserts;
@@ -53,11 +54,9 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
 
     @Override
     public OrderResult generateOrder(OrderParam orderParam) {
-        // prepare
         Long eventId = orderParam.getEventId();
         List<TicketDto> ticketDtos = orderParam.getTickets();
 
-        // grouping
         List<Long> ticketIds = ticketDtos.stream().map(TicketDto::getTicketId)
                 .distinct().toList();
         Map<Long, Integer> tQuantityMap = ticketDtos.stream()
@@ -158,7 +157,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         if (!updated) Asserts.fail("Order not found or has an unexpected status");
 
 
-        List<OesOrderAttendee> orderAttendees = getOrderAttendeesByOrderId(orderId);
+        List<OesOrderAttendee> orderAttendees = getAttendeesByOrderId(orderId);
 
         Map<Long, Long> stockIdToReservedQtyMap = orderAttendees.stream()
                 .collect(groupingBy(OesOrderAttendee::getTicketStockId, counting()));
@@ -185,7 +184,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         abandonOrder.setStatus(DEFAULT_ORDER_ABANDON_STATUS);
         updateById(abandonOrder);
 
-        List<OesOrderAttendee> orderAttendees = getOrderAttendeesByOrderId(orderId);
+        List<OesOrderAttendee> orderAttendees = getAttendeesByOrderId(orderId);
 
         Map<Long, Long> stockIdToReservedQtyMap = orderAttendees.stream()
                 .collect(groupingBy(OesOrderAttendee::getTicketStockId, counting()));
@@ -208,8 +207,9 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         cancelOrderSender.sendMessage(orderId);
     }
 
-    private List<OesOrderAttendee> getOrderAttendeesByOrderId(Long orderId) {
-        var orderAttendeeWrp = new LambdaUpdateWrapper<OesOrderAttendee>();
+    @Override
+    public List<OesOrderAttendee> getAttendeesByOrderId(Long orderId) {
+        var orderAttendeeWrp = new LambdaQueryWrapper<OesOrderAttendee>();
         orderAttendeeWrp.eq(OesOrderAttendee::getOrderId, orderId);
         return orderAttendeeMapper.selectList(orderAttendeeWrp);
     }

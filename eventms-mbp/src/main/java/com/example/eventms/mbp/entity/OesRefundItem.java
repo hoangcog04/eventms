@@ -1,20 +1,18 @@
 package com.example.eventms.mbp.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author vicendy04
@@ -32,14 +30,9 @@ public class OesRefundItem implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long orderId;
-
-    private String orderSn;
+    private Long refundRequestId;
 
     private Long ticketId;
-
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime created;
 
     private String ticketName;
 
@@ -55,8 +48,26 @@ public class OesRefundItem implements Serializable {
     private BigDecimal couponAmount;
 
     @Schema(description = "Quantity refunded")
-    private Integer quantityProcessed;
+    private Integer refundQty;
 
     @Schema(description = "The amount of money refunded")
+    private BigDecimal refundAmount;
+
+    @Schema(description = "Quantity processed")
+    private Integer qtyProcessed;
+
+    @Schema(description = "The amount of money processed")
     private BigDecimal amountProcessed;
+
+    @Schema(description = "Same information as Order owner")
+    private String billReceiverEmail;
+
+    @Schema(description = "Same information as Order owner")
+    private String receiverName;
+
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime created;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime changed;
 }

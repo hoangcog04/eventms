@@ -43,9 +43,6 @@ public class OesRefundRequest implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime created;
 
-    @Schema(description = "0->Default; 1->Order; 2->Ticket")
-    private Integer itemType;
-
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime changed;
 
@@ -65,8 +62,8 @@ public class OesRefundRequest implements Serializable {
     @Schema(description = "0->Email;1->Phone")
     private Integer deliveryMethod;
 
-    @Schema(description = "Actual payment amount")
-    private BigDecimal payAmount;
+    @Schema(description = "Actual order payment amount")
+    private BigDecimal orderPayAmount;
 
     @Schema(description = "0->Pending (default); 1->Refunding; 2->Processed; 3->Rejected; 4->Error")
     private Integer status;

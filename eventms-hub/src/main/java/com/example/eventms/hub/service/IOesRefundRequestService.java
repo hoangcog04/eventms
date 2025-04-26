@@ -1,7 +1,9 @@
 package com.example.eventms.hub.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.eventms.hub.dto.RefundRequestPayload;
 import com.example.eventms.mbp.entity.OesRefundRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -13,4 +15,6 @@ import com.example.eventms.mbp.entity.OesRefundRequest;
  */
 public interface IOesRefundRequestService extends IService<OesRefundRequest> {
 
+    @Transactional
+    boolean requestRefund(Long orderId, RefundRequestPayload payload);
 }

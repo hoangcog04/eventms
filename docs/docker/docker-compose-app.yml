@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   eventms-organizer:
-    image: eventms-organizer:1.0-SNAPSHOT
+    image: eventms-organizer:2.0-SNAPSHOT
     container_name: eventms-organizer
     ports:
       - "8080:8080"
@@ -13,7 +13,7 @@ services:
     depends_on:
       - mysql
   eventms-hub:
-    image: eventms-hub:1.0-SNAPSHOT
+    image: eventms-hub:2.0-SNAPSHOT
     container_name: eventms-hub
     ports:
       - "8085:8085"

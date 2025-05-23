@@ -10,6 +10,7 @@ import com.example.eventms.organizer.dto.EventContent.Module;
 import com.example.eventms.organizer.dto.EventContent.Widget;
 import com.example.eventms.organizer.mapper.EventConverter;
 import com.example.eventms.organizer.service.IEesEventService;
+import com.example.eventms.organizer.service.aggregator.ParamAggregator;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import static com.example.eventms.common.constant.ParamConstants.*;
 import static com.example.eventms.common.constant.BusinessConstants.*;
 import static com.example.eventms.organizer.constant.ValidateErrConstants.*;
 import static com.example.eventms.organizer.dto.EventContent.WidgetType;
@@ -41,7 +42,6 @@ import static com.example.eventms.organizer.utils.ValidationUtils.*;
 @Service
 public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> implements IEesEventService {
     EesFaqMapper faqMapper;
-    EesVenueMapper venueMapper;
     EesAgendaMapper agendaMapper;
     EesTicketMapper ticketMapper;
     EesAttributeMapper attributeMapper;
@@ -50,6 +50,7 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
     EesAttributeValueMapper attributeValueMapper;
     EesCheckoutSettingMapper checkoutSettingMapper;
     EventConverter eventConverter;
+    Map<String, ParamAggregator> paramAggregators;
 
     @Override
     public EventResult autoCreate(EventPayload eventPayload) {
@@ -117,39 +118,7 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
             eventDetail.setAttributes(attrDetailDtos);
         }
 
-        if (paramList.contains(VENUE_EXPANSION)) {
-            EesVenue eesVenue = venueMapper.selectById(eesEvent.getVenueId());
-            EventDetail.VenueDto venueDto = eventConverter.toVenueDetailDto(eesVenue);
-            eventDetail.setVenue(venueDto);
-        }
-
-        if (paramList.contains(ORGANIZER_EXPANSION)) {
-            UesOrganizer uesOrganizer = organizerMapper.selectById(eesEvent.getOrganizerId());
-            EventDetail.OrganizerDto organizerDto = eventConverter.toOrganizerDetailDto(uesOrganizer);
-            eventDetail.setOrganizer(organizerDto);
-        }
-
-        if (paramList.contains(CHECKOUT_SETTING_EXPANSION)) {
-            var checkoutSettingWrp = new LambdaQueryWrapper<EesCheckoutSetting>();
-            checkoutSettingWrp.eq(EesCheckoutSetting::getEventId, eventId);
-            List<EesCheckoutSetting> eesCheckoutSettings = checkoutSettingMapper.selectList(checkoutSettingWrp);
-            List<EventDetail.CheckoutSettingDto> checkoutSettingDtos = eventConverter.toCheckoutSettingDtos(eesCheckoutSettings);
-            eventDetail.setCheckoutSettings(checkoutSettingDtos);
-        }
-
-        if (paramList.contains(PROPERTY_EXPANSION)) {
-            var agendaWrp = new LambdaQueryWrapper<EesAgenda>();
-            agendaWrp.eq(EesAgenda::getEventId, eventId);
-            List<EesAgenda> eesAgendas = agendaMapper.selectList(agendaWrp);
-            List<EventDetail.AgendaDto> agendaDtos = eventConverter.toAgendaDtos(eesAgendas);
-            eventDetail.setAgendas(agendaDtos);
-
-            var faqWrp = new LambdaQueryWrapper<EesFaq>();
-            faqWrp.eq(EesFaq::getEventId, eventId);
-            List<EesFaq> eesFaqs = faqMapper.selectList(faqWrp);
-            List<EventDetail.FaqDto> faqDtos = eventConverter.toFaqDtos(eesFaqs);
-            eventDetail.setFaqs(faqDtos);
-        }
+        processParam(eventDetail, eesEvent, paramList);
 
         return eventDetail;
     }
@@ -202,6 +171,18 @@ public class EesEventServiceImpl extends ServiceImpl<EesEventMapper, EesEvent> i
         updateById(eesEvent);
         agendaMapper.insertOrUpdate(eesAgendas);
         faqMapper.insertOrUpdate(eesFaqs);
+    }
+
+    private void processParam(EventDetail data, EesEvent event, List<String> params) {
+        for (var paramKey : paramAggregators.keySet()) {
+            if (params.contains(paramKey)) {
+                var paramAggregator = paramAggregators.get(paramKey);
+                paramAggregator.aggregate(data, event);
+            } else {
+                // log
+                assert true;
+            }
+        }
     }
 
     private List<EesAgenda> mergeWithExistingAgenda(Long eventId, JsonNode wData) {

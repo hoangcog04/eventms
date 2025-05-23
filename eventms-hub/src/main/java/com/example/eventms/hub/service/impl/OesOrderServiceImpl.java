@@ -176,7 +176,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
 
     @Override
     public void abandonOrder(Long orderId) {
-        var orderWrp = new LambdaUpdateWrapper<OesOrder>();
+        var orderWrp = new LambdaQueryWrapper<OesOrder>();
         orderWrp.eq(OesOrder::getId, orderId).eq(OesOrder::getStatus, DEFAULT_ORDER_STATUS);
         OesOrder abandonOrder = getOne(orderWrp);
 

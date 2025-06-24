@@ -62,12 +62,11 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         Map<Long, Integer> tQuantityMap = ticketDtos.stream()
                 .collect(toMap(TicketDto::getTicketId, TicketDto::getQuantity));
 
-        List<TicketDetail> ticketDetails = ticketMapper.getTicketDetail(ticketIds);
+        List<TicketDetail> ticketDetails = filterTicketsByEvent(ticketIds, eventId);
 
-        // remove fake ticket ids
-        ticketDetails = ticketDetails.stream()
-                .filter(t -> Objects.equals(eventId, t.getEventId()))
-                .toList();
+        if (ticketDetails.isEmpty()) {
+            Asserts.fail("No valid tickets to process");
+        }
 
         if (isQuantityExceedingMaxPerOrder(ticketDetails, tQuantityMap)) {
             Asserts.fail("Quantity exceeds the maximum allowed per order");
@@ -143,6 +142,13 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         return orderConverter.toOrderResult(order, orderAttendees);
     }
 
+    public List<TicketDetail> filterTicketsByEvent(List<Long> ticketIds, Long eventId) {
+        List<TicketDetail> ticketDetails = ticketMapper.getTicketDetail(ticketIds);
+        return ticketDetails.stream()
+                .filter(t -> Objects.equals(eventId, t.getEventId()))
+                .toList();
+    }
+
     @Override
     public Integer paySuccess(Long orderId, OrderCompletion payload) {
         OesOrder order = new OesOrder();
@@ -155,7 +161,6 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         boolean updated = update(order, orderWrp);
 
         if (!updated) Asserts.fail("Order not found or has an unexpected status");
-
 
         List<OesOrderAttendee> orderAttendees = getAttendeesByOrderId(orderId);
 
@@ -214,7 +219,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         return orderAttendeeMapper.selectList(orderAttendeeWrp);
     }
 
-    private boolean isQuantityExceedingMaxPerOrder(List<TicketDetail> ts, Map<Long, Integer> tQuantityMap) {
+    public boolean isQuantityExceedingMaxPerOrder(List<TicketDetail> ts, Map<Long, Integer> tQuantityMap) {
         for (TicketDetail t : ts) {
             Integer quantity = tQuantityMap.get(t.getId());
             Integer maxQuantityPerOrder = t.getMaxQuantityPerOrder();
@@ -231,7 +236,7 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         return true;
     }
 
-    private void calRealAmount(List<OesOrderAttendee> orderAttendees) {
+    public void calRealAmount(List<OesOrderAttendee> orderAttendees) {
         for (OesOrderAttendee a : orderAttendees) {
             BigDecimal realAmount = a.getTicketPrice().subtract(a.getCouponAmount());
             a.setRealAmount(realAmount);
@@ -248,9 +253,11 @@ public class OesOrderServiceImpl extends ServiceImpl<OesOrderMapper, OesOrder> i
         }
     }
 
-    private BigDecimal calcTotalAmount(List<OesOrderAttendee> orderAttendees) {
+    public BigDecimal calcTotalAmount(List<OesOrderAttendee> orderAttendees) {
         BigDecimal totalAmount = new BigDecimal("0");
         for (OesOrderAttendee a : orderAttendees) totalAmount = totalAmount.add(a.getTicketPrice());
+        // make it fail in test case
+        // totalAmount = totalAmount.add(new BigDecimal("1"));
         return totalAmount;
     }
 }
